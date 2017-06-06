@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Vive Tungurahua</title>
+</head>
+<body>
+    <div>
+        <h1>Nuevo establecimiento</h1>
+        <div class="container bs-container big-font-container">
+            <div class="row row-centered">
+                <div class="bs-section col-lg-9 col-centered">
+                    <form th:object="${Establecimiento}" method="post"
+                          th:action="@{${#httpServletRequest.getRequestURI()}}"
+                          class="form-horizontal" id="establecimiento-form">
+
+                        <div th:if="${#fields.hasGlobalErrors()}"
+                             class="has-error col-lg-offset-3 alert alert-dismissible alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <label class="control-label" th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</label>
+                        </div>
+
+                        <input type="hidden" th:field="*{estId}" id="txtestId"/>
+                        <table class="table table-striped">
+                            <tr th:classappend="${#fields.hasErrors('estNombre')} ? 'has-error'">
+                                <td class="col-sm-1">
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('estNombre')} ? 'error'">
+                                        <label class="control-label">Nombre</label>
+                                    </div>
+                                </td>
+                                <td class="col-sm-2">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" th:field="*{estNombre}"/>
+                                        <label class="control-label" th:errors="*{estNombre}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:classappend="${#fields.hasErrors('estDireccion')} ? 'has-error'">
+                                <td>
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('estDireccion')} ? 'error'">
+                                        <label class="control-label">Dirección</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="controls">
+                                        <input type="text" class="form-control" th:field="*{estDireccion}"/>
+                                        <label class="control-label" th:errors="*{estDireccion}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:classappend="${#fields.hasErrors('estRepresentante')} ? 'has-error'">
+                                <td>
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('estRepresentante')} ? 'error'">
+                                        <label class="control-label">Representante</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="controls">
+                                        <input type="text" class="form-control" th:field="*{estRepresentante}"/>
+                                        <label class="control-label" th:errors="*{estRepresentante}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:classappend="${#fields.hasErrors('estAfiliado')} ? 'has-error'">
+                                <td>
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('estAfiliado')} ? 'error'">
+                                        <label class="control-label">Afiliado</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="controls">
+                                        <input type="text"
+                                               class="form-control"
+                                               autocomplete="off"
+                                               th:field="*{estAfiliado}"/>
+                                        <label class="control-label" th:errors="*{estAfiliado}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:classappend="${#fields.hasErrors('estPagina')} ? 'has-error'">
+                                <td>
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('estPagina')} ? 'error'">
+                                        <label class="control-label">Página</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="controls">
+                                        <input type="text"
+                                               class="form-control"
+                                               autocomplete="off"
+                                               th:field="*{estPagina}"/>
+                                        <label class="control-label" th:errors="*{estPagina}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:classappend="${#fields.hasErrors('fkEstCnt')} ? 'has-error'">
+                                <td>
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('fkEstCnt')} ? 'error'">
+                                        <label class="control-label">Cantón</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="controls">
+                                        <select th:field="*{fkEstCnt}">
+                                            <option th:each="canton: ${allCantones}" th:value="${canton.cntId}" th:text="${canton.cntNombre}"></option>
+                                        </select>
+                                        <label class="control-label" th:errors="*{fkEstCnt}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:classappend="${#fields.hasErrors('fkEstTipo')} ? 'has-error'">
+                                <td>
+                                    <div class="control-group" th:classappend="${#fields.hasErrors('fkEstTipo')} ? 'error'">
+                                        <label class="control-label">Tipo de establecimiento</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="col-sm-10">
+                                        <select th:field="*{fkEstTipo}">
+                                            <option th:each="tipoEstablecimiento: ${allTiposEst}" th:value="${tipoEstablecimiento.tEstId}" th:text="${tipoEstablecimiento.tEstTipo}"></option>
+                                        </select>
+                                        <label class="control-label" th:errors="*{fkEstTipo}">[error]</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            </table>
+
+                            <table class="table table-striped">
+                                <tr>
+                                    <th class="col-sm-1">Teléfono/s</th>
+                                </tr>
+                                <tr th:each="NumTelefono, rowStat : *{fkTlfEst}">
+                                    <td></td>
+                                    <td><input type="text" class="form-control input-button-right"
+                                               th:field="*{Telefono[__${rowStat.index}__].tlfTelefono}"/>
+                                        <span class="col-sm-1 row-delete-button">
+                                   <button type="submit" class="btn btn-default"
+                                           th:value="*{Telefono[__${rowStat.index}__].tlfId}"
+                                           name="removeContactPhone" th:disabled="${appSettings.getIsDemoSite()}">
+                                       <i class="glyphicon glyphicon-trash icon-white"></i>
+                                   </button>
+                                </span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!--<table class="table table-striped" th:if="${!contact['new']}">
+                                <tr>
+                                    <td class="col-sm-1">
+                                        <label th:text="#{contactform.hobbies.title}">[Hobbies]</label>
+                                    </td>
+                                    <td class="col-sm-2">
+                                        <ul class="hobbyList">
+                                            <li th:each="hobby : ${hobbies}">
+                                                <input type="checkbox" th:field="*{hobbies}" th:value="${hobby.hobbyId}"/>
+                                                <label th:for="${#ids.prev('hobbies')}" th:text="#{${hobby}}">[Hobby]</label>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </table>-->
+
+
+                       <!-- <div class="col-lg-12 button-col-align-right">
+                            <input type="submit" class="btn btn-primary"
+                                   th:value="(${contact['new']} ? 'Add' : 'Update') + ' Contact'"/>
+                            <input th:type="submit" class="btn btn-success" th:if="${!contact['new']}"
+                                   name="addContactPhone"
+                                   th:value="#{contactform.contactPhone.row.add}"/>
+                            <input type="button" th:onclick="'window.location.href=\'' + @{|/contacts/|} + '\''"
+                                   class="btn btn-success" value="Cancel"/>
+                        </div>-->
+
+                    </form>
+                    <!--<div th:if="${appSettings.getIsDemoSite()}" class="form-disabled-note pull-right"><strong>Note: </strong>
+                        Updating and
+                        Creating Contacts requires Admin Role
+                    </div>-->
+                    <!--Alternatives to Restricting Access to Submit Button...-->
+                    <!--th:disabled="!${currentUser?.user.hasAuthority('ROLE_ADMIN')}"-->
+                    <!--th:disabled="!${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
+                </div>
+            </div>
+            <!--<nav th:replace="fragments/secinfo :: [id='secInfo']">User Info</nav>-->
+        </div>
+
+    </div>
+</body>
+</html>

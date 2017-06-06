@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Establecimientos</title>
+</head>
+<body>
+<div class="container">
+
+    <div th:if="${not #lists.isEmpty(establecimientos)}">
+        <h2>Lista de establecimientos</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Identificador</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Representate</th>
+                <th>Afiliados</th>
+                <th>Página</th>
+                <th>Teléfono</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+            <tr th:each="Establecimiento : ${establecimientos}">
+                <td th:text="${Establecimiento.estId}">Identificador</td>
+                <td th:text="${Establecimiento.estNombre}">Nombre</td>
+                <td th:text="${Establecimiento.estDireccion}">Dirección</td>
+                <td th:text="${Establecimiento.estRepresentante}">Representate</td>
+                <td th:text="${Establecimiento.estAfiliado}">Afiliados</td>
+                <td th:text="${Establecimiento.estPagina}">Página</td>
+                <td>Teléfonos</td>
+                <td><a th:href="${ 'vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/' + Establecimiento.estId}">Ver</a></td>
+                <td><a th:href="${'vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/edit/' + Establecimiento.estId}">Edit</a></td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+</body>
+</html>
