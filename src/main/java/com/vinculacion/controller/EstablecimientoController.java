@@ -7,19 +7,15 @@ import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
 import com.vinculacion.jpa.model.Canton;
 import com.vinculacion.jpa.model.Establecimiento;
 import com.vinculacion.jpa.model.Telefono;
-import com.vinculacion.jpa.model.TipoEstablecimiento;
 import com.vinculacion.jpa.model.validators.EstablecimientoFormValidator;
 import com.vinculacion.jpa.service.CantonService;
 import com.vinculacion.jpa.service.EstablecimientoService;
-import com.vinculacion.jpa.service.EstablecimientoServiceImpl;
-import com.vinculacion.jpa.service.TipoEstablecimientoService;
 import com.vinculacion.jpa.utils.EstablecimientoUtils;
 import com.vinculacion.jpa.utils.SharedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -32,9 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -46,7 +40,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class EstablecimientoController {
 
     private EstablecimientoService establecimientoService;
+    private CantonService cantonService;
     private EstablecimientoFormValidator establecimientoFormValidator;
+    protected static final String MODEL_ATTRIBUTE_CANTONES = "cantones";
 
     private static final Logger logger = LoggerFactory.getLogger(Establecimiento.class);
 
@@ -114,6 +110,7 @@ public class EstablecimientoController {
     public String addEstablecimiento(@Valid Establecimiento establecimiento, BindingResult result, SessionStatus status,
                              RedirectAttributes attributes) {
         if (result.hasErrors()) {
+            logger.debug("Vamos a intentar guardar el establecimiento...!!!!!!!!!!!!!!!");
             return ESTABLECIMIENTO_FORM_VIEW;
         } else {
             EstablecimientoDTO establecimientoDTO = EstablecimientoUtils.establecimientoToEstablecimientoDTO(establecimiento);

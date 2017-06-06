@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.vinculacion.jpa.dto.EstablecimientoDTO;
 import com.vinculacion.jpa.dto.TelefonoDTO;
 import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
+import com.vinculacion.jpa.model.Canton;
 import com.vinculacion.jpa.model.Establecimiento;
 import com.vinculacion.jpa.model.Telefono;
 import com.vinculacion.jpa.repository.EstablecimientoRepository;
@@ -105,7 +106,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     @Transactional(rollbackFor = EstablecimientoNotFoundException.class)
     @Override
     public Establecimiento update(EstablecimientoDTO establecimientoDTO) throws EstablecimientoNotFoundException {
-        logger.info("Updating establecimiento with information: {}", establecimientoDTO);
+        logger.info("Actualizando establecimiento on información: {}", establecimientoDTO);
 
         Establecimiento found = findEstablecimientoById(establecimientoDTO.getEstablecimientoId());
 
@@ -133,10 +134,10 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     @Transactional
     @Override
     public Establecimiento add(EstablecimientoDTO establecimientoDTO) {
-        logger.info("Adding new Establecimiento with information: {}", establecimientoDTO);
+        logger.info("Agregando nuevo Establecimiento con información: {}", establecimientoDTO);
 
         //Creates an instance of an establecimiento by using the builder pattern
-        Establecimiento establecimiento = Establecimiento.getBuilder(establecimientoDTO.getEstNombre(),
+        Establecimiento establecimiento = Establecimiento.getBuilder(establecimientoDTO.getCntId(), establecimientoDTO.getEstNombre(),
                 establecimientoDTO.getEstRepresentante(), establecimientoDTO.getEstDireccion(),establecimientoDTO.getEstPagina(),
                 establecimientoDTO.getEstLongitud(), establecimientoDTO.getEstLatitud(),establecimientoDTO.getEstFicheroImagenes(),
                 establecimientoDTO.getEstAfiliado())

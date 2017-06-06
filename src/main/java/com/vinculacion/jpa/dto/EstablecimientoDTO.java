@@ -1,5 +1,6 @@
 package com.vinculacion.jpa.dto;
 
+import com.vinculacion.jpa.model.Canton;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -14,6 +15,7 @@ import java.util.Set;
 public class EstablecimientoDTO {
 
     private Long establecimientoId;
+    private Long cntId;
     private Set<TelefonoDTO> contactPhones;
 
     @NotEmpty
@@ -28,28 +30,22 @@ public class EstablecimientoDTO {
     @Length(max = Establecimiento.MAX_LENGTH_ESTABLECIMIENTO_DIRECCION)
     private String estDireccion;
 
-    @NotEmpty
     @Length(max = Establecimiento.MAX_LENGTH_ESTABLECIMIENTO_PAGINA)
     private String estPagina;
 
-    @NotEmpty
     @Length(max = Establecimiento.MAX_LENGTH_ESTABLECIMIENTO_FICEHROIMAGENES)
     private String estFicheroImagenes;
 
-    @NotEmpty
     private String estLongitud;
 
-    @NotEmpty
     private String estLatitud;
 
-    @NotEmpty
     private int estAfiliado;
 
 
     private boolean updateChildren = true;
 
     public EstablecimientoDTO() {
-
     }
 
     public Long getEstablecimientoId() {
@@ -132,6 +128,14 @@ public class EstablecimientoDTO {
         this.estAfiliado = estAfiliado;
     }
 
+    public Long getCntId() {
+        return cntId;
+    }
+
+    public void setCntId(Long cntId) {
+        this.cntId = cntId;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -149,4 +153,5 @@ public class EstablecimientoDTO {
     public void setUpdateChildren(boolean updateChildren) {
         this.updateChildren = updateChildren;
     }
+
 }

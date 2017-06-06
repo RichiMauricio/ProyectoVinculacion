@@ -27,6 +27,7 @@ public class Establecimiento implements Serializable{
     private String estLatitud;
     private String estLongitud;
     private String estFicheroImagenes;
+    private String algo_adicional;
     private int estAfiliado;
     private Set<Telefono> telefonos;
     private Canton canton;
@@ -146,6 +147,14 @@ public class Establecimiento implements Serializable{
         this.canton = canton;
     }
 
+    public String getAlgo_adicional() {
+        return algo_adicional;
+    }
+
+    public void setAlgo_adicional(String algo_adicional) {
+        this.algo_adicional = algo_adicional;
+    }
+
     @ManyToOne
     @JoinColumn(name = "tipoEstId", referencedColumnName = "tipoEstId", nullable = false)
     public TipoEstablecimiento getTipoEstablecimiento() {
@@ -169,6 +178,7 @@ public class Establecimiento implements Serializable{
                 .append("latitud", this.getEstLatitud())
                 .append("ficheroDeImagenes", this.getEstFicheroImagenes())
                 .append("afiliado", this.getEstAfiliado())
+                .append("cntId", this.canton.getCntId())
                 .toString();
     }
 
@@ -184,18 +194,20 @@ public class Establecimiento implements Serializable{
         this.estAfiliado = afiliado;
     }
 
-    public static Builder getBuilder(String nombre, String representante, String direccion, String pagina,
+    public static Builder getBuilder(Long cntId, String nombre, String representante, String direccion, String pagina,
                                             String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
-        return new Establecimiento.Builder(nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes, afiliado);
+        return new Establecimiento.Builder(cntId, nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes,
+                afiliado);
     }
 
     public static class Builder {
 
         private Establecimiento built;
 
-        public Builder(String nombre, String representante, String direccion, String pagina,
+        public Builder(Long cntId, String nombre, String representante, String direccion, String pagina,
                        String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
             built = new Establecimiento();
+            built.canton.setCntId(cntId);
             built.estNombre = nombre;
             built.estRepresentante = representante;
             built.estDireccion = direccion;

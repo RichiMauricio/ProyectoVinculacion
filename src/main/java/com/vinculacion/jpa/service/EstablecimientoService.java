@@ -1,5 +1,6 @@
 package com.vinculacion.jpa.service;
 
+import com.vinculacion.jpa.model.Canton;
 import com.vinculacion.jpa.model.Establecimiento;
 
 import java.util.List;

@@ -73,6 +73,7 @@ public class EstablecimientoUtils {
         EstablecimientoDTO dto = new EstablecimientoDTO();
 
         dto.setEstablecimientoId(establecimiento.getEstId());
+        dto.setEstNombre(establecimiento.getEstNombre());
         dto.setEstRepresentante(establecimiento.getEstRepresentante());
         dto.setEstDireccion(establecimiento.getEstDireccion());
         dto.setEstPagina(establecimiento.getEstPagina());
@@ -80,6 +81,7 @@ public class EstablecimientoUtils {
         dto.setEstLatitud(establecimiento.getEstLatitud());
         dto.setEstFicheroImagenes(establecimiento.getEstFicheroImagenes());
         dto.setEstAfiliado(establecimiento.getEstAfiliado());
+        dto.setCntId(establecimiento.getCanton().getCntId());
         if (establecimiento.getTelefonos() != null) {
             dto.setContactPhones(
                     establecimiento.getTelefonos().stream().map(TelefonoDTO::new).collect(Collectors.toSet()));
