@@ -8,7 +8,5 @@ import java.util.List;
  * Created by Mauricio on 06/06/2017.
  */
 public interface CantonService {
-
     List<Canton> findAll();
-
 }

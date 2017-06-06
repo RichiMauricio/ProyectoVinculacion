@@ -27,7 +27,6 @@ public class Establecimiento implements Serializable{
     private String estLatitud;
     private String estLongitud;
     private String estFicheroImagenes;
-    private String algo_adicional;
     private int estAfiliado;
     private Set<Telefono> telefonos;
     private Canton canton;
@@ -147,14 +146,6 @@ public class Establecimiento implements Serializable{
         this.canton = canton;
     }
 
-    public String getAlgo_adicional() {
-        return algo_adicional;
-    }
-
-    public void setAlgo_adicional(String algo_adicional) {
-        this.algo_adicional = algo_adicional;
-    }
-
     @ManyToOne
     @JoinColumn(name = "tipoEstId", referencedColumnName = "tipoEstId", nullable = false)
     public TipoEstablecimiento getTipoEstablecimiento() {
@@ -178,7 +169,7 @@ public class Establecimiento implements Serializable{
                 .append("latitud", this.getEstLatitud())
                 .append("ficheroDeImagenes", this.getEstFicheroImagenes())
                 .append("afiliado", this.getEstAfiliado())
-                .append("cntId", this.canton.getCntId())
+                .append("canton", this.getCanton().getCntId())
                 .toString();
     }
 
@@ -194,9 +185,9 @@ public class Establecimiento implements Serializable{
         this.estAfiliado = afiliado;
     }
 
-    public static Builder getBuilder(Long cntId, String nombre, String representante, String direccion, String pagina,
+    public static Builder getBuilder(Canton canton, String nombre, String representante, String direccion, String pagina,
                                             String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
-        return new Establecimiento.Builder(cntId, nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes,
+        return new Establecimiento.Builder(canton, nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes,
                 afiliado);
     }
 
@@ -204,10 +195,10 @@ public class Establecimiento implements Serializable{
 
         private Establecimiento built;
 
-        public Builder(Long cntId, String nombre, String representante, String direccion, String pagina,
+        public Builder(Canton canton, String nombre, String representante, String direccion, String pagina,
                        String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
             built = new Establecimiento();
-            built.canton.setCntId(cntId);
+            built.canton = canton;
             built.estNombre = nombre;
             built.estRepresentante = representante;
             built.estDireccion = direccion;

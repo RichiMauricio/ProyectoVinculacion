@@ -15,7 +15,7 @@ import java.util.Set;
 public class EstablecimientoDTO {
 
     private Long establecimientoId;
-    private Long cntId;
+    private Canton cntId;
     private Set<TelefonoDTO> contactPhones;
 
     @NotEmpty
@@ -128,11 +128,11 @@ public class EstablecimientoDTO {
         this.estAfiliado = estAfiliado;
     }
 
-    public Long getCntId() {
+    public Canton getCntId() {
         return cntId;
     }
 
-    public void setCntId(Long cntId) {
+    public void setCntId(Canton cntId) {
         this.cntId = cntId;
     }
 
@@ -144,7 +144,6 @@ public class EstablecimientoDTO {
     public boolean isNew() {
         return (this.establecimientoId == null);
     }
-
 
     public boolean isUpdateChildren() {
         return updateChildren;

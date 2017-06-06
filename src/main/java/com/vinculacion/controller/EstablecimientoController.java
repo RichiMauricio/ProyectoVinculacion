@@ -68,6 +68,12 @@ public class EstablecimientoController {
         binder.setDisallowedFields("id");
     }
 
+    //Lista de los cantones para el establecimiento
+    @ModelAttribute(MODEL_ATTRIBUTE_CANTONES)
+    public List<Canton> allCantones() {
+        return cantonService.findAll();
+    }
+
     @ModelAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS)
     public List<Establecimiento> allEstablecimientos() {
         return establecimientoService.findAll();
@@ -101,9 +107,15 @@ public class EstablecimientoController {
 
     @RequestMapping(value = "/establecimiento/new", method = RequestMethod.GET)
     public String initAddEstablecimientoForm(Model model) {
-        Establecimiento establecimiento = new Establecimiento();
-        model.addAttribute(establecimiento);
-        return ESTABLECIMIENTO_FORM_VIEW;
+        try{
+            Establecimiento establecimiento = new Establecimiento();
+            model.addAttribute(establecimiento);
+            return ESTABLECIMIENTO_FORM_VIEW;
+        }catch(Exception e){
+            logger.debug(e.getMessage());
+            return "falló";
+        }
+
     }
 
     @RequestMapping(value = "/establecimiento/new", method = RequestMethod.POST)

@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Mauricio on 08/05/2017.
  */
 @Service
-public class CantonServiceImpl {
+public class CantonServiceImpl implements CantonService{
 
     @Autowired
     CantonRepository cantonRepository;
