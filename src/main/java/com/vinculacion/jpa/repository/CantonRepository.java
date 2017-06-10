@@ -8,5 +8,5 @@ import java.io.Serializable;
 /**
  * Created by Mauricio on 08/05/2017.
  */
-public interface CantonRepository extends JpaRepository<Canton,Integer>, Serializable {
+public interface CantonRepository extends JpaRepository<Canton,Long>, Serializable {
 }

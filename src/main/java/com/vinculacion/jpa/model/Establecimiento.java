@@ -29,8 +29,9 @@ public class Establecimiento implements Serializable{
     private String estFicheroImagenes;
     private int estAfiliado;
     private Set<Telefono> telefonos;
-    private Canton canton;
-    private TipoEstablecimiento tipoEstablecimiento;
+    private Set<Correo> correos;
+    private Long canton;
+    private Long tipoEstablecimiento;
 
     public static final int MAX_LENGTH_ESTABLECIMIENTO_NOMBRE = 40;
     public static final int MAX_LENGTH_ESTABLECIMIENTO_REPRESENTANTE = 50;
@@ -127,6 +128,24 @@ public class Establecimiento implements Serializable{
         this.estFicheroImagenes = estFicheroImagenes;
     }
 
+    @Column(name = "canton", unique = false, nullable = false)
+    public Long getCanton() {
+        return canton;
+    }
+
+    public void setCanton(Long canton) {
+        this.canton = canton;
+    }
+
+    @Column(name = "tipoEstablecimiento", unique = false, nullable = false)
+    public Long getTipoEstablecimiento() {
+        return tipoEstablecimiento;
+    }
+
+    public void setTipoEstablecimiento(Long tipoEstablecimiento) {
+        this.tipoEstablecimiento = tipoEstablecimiento;
+    }
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "establecimiento")
     public Set<Telefono> getTelefonos() {
         return telefonos;
@@ -136,24 +155,13 @@ public class Establecimiento implements Serializable{
         this.telefonos = telefonos;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "cntId", referencedColumnName = "cntId", nullable = false)
-    public Canton getCanton() {
-        return canton;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "establecimiento")
+    public Set<Correo> getCorreos() {
+        return correos;
     }
 
-    public void setCanton(Canton canton) {
-        this.canton = canton;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "tipoEstId", referencedColumnName = "tipoEstId", nullable = false)
-    public TipoEstablecimiento getTipoEstablecimiento() {
-        return tipoEstablecimiento;
-    }
-
-    public void setTipoEstablecimiento(TipoEstablecimiento tipoEstablecimiento) {
-        this.tipoEstablecimiento = tipoEstablecimiento;
+    public void setCorreos(Set<Correo> correos) {
+        this.correos = correos;
     }
 
     @Override
@@ -169,7 +177,8 @@ public class Establecimiento implements Serializable{
                 .append("latitud", this.getEstLatitud())
                 .append("ficheroDeImagenes", this.getEstFicheroImagenes())
                 .append("afiliado", this.getEstAfiliado())
-                .append("canton", this.getCanton().getCntId())
+                .append("cntId", this.getCanton())
+                .append("tipoEstId", this.getTipoEstablecimiento())
                 .toString();
     }
 
@@ -185,9 +194,9 @@ public class Establecimiento implements Serializable{
         this.estAfiliado = afiliado;
     }
 
-    public static Builder getBuilder(Canton canton, String nombre, String representante, String direccion, String pagina,
-                                            String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
-        return new Establecimiento.Builder(canton, nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes,
+    public static Builder getBuilder(Long tipoEst, Long cntId, String nombre, String representante, String direccion, String pagina,
+                                     String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
+        return new Establecimiento.Builder(tipoEst, cntId, nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes,
                 afiliado);
     }
 
@@ -195,10 +204,9 @@ public class Establecimiento implements Serializable{
 
         private Establecimiento built;
 
-        public Builder(Canton canton, String nombre, String representante, String direccion, String pagina,
+        public Builder(Long tipoEst, Long cntId, String nombre, String representante, String direccion, String pagina,
                        String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
             built = new Establecimiento();
-            built.canton = canton;
             built.estNombre = nombre;
             built.estRepresentante = representante;
             built.estDireccion = direccion;
@@ -207,9 +215,9 @@ public class Establecimiento implements Serializable{
             built.estLatitud = latitud;
             built.estFicheroImagenes = ficheroDeImagenes;
             built.estAfiliado = afiliado;
+            built.canton = cntId;
+            built.tipoEstablecimiento = tipoEst;
         }
-
-
         public Establecimiento build() {
             return built;
         }

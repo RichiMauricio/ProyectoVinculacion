@@ -7,9 +7,11 @@ import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
 import com.vinculacion.jpa.model.Canton;
 import com.vinculacion.jpa.model.Establecimiento;
 import com.vinculacion.jpa.model.Telefono;
+import com.vinculacion.jpa.model.TipoEstablecimiento;
 import com.vinculacion.jpa.model.validators.EstablecimientoFormValidator;
 import com.vinculacion.jpa.service.CantonService;
 import com.vinculacion.jpa.service.EstablecimientoService;
+import com.vinculacion.jpa.service.TipoEstablecimientoServiceImpl;
 import com.vinculacion.jpa.utils.EstablecimientoUtils;
 import com.vinculacion.jpa.utils.SharedUtils;
 import org.slf4j.Logger;
@@ -41,8 +43,14 @@ public class EstablecimientoController {
 
     private EstablecimientoService establecimientoService;
     private CantonService cantonService;
+    private TipoEstablecimientoServiceImpl tipoEstablecimientoService;
     private EstablecimientoFormValidator establecimientoFormValidator;
     protected static final String MODEL_ATTRIBUTE_CANTONES = "cantones";
+    protected static final String MODEL_ATTRIBUTE_TIPOS_ESTABL = "tipoEstablecimiento";
+    protected static final String MODEL_ATTRIBUTE_ESTABLECIMIENTO = "establecimiento";
+    protected static final String MODEL_ATTRIBUTE_ESTABLECIMIENTOS = "establecimientos";
+    protected static final String PARAMETER_ESTABLECIMIENTO_ID = "id";
+    protected static final String MODEL_ATTRIBUTE_CANTON = "canton";
 
     private static final Logger logger = LoggerFactory.getLogger(Establecimiento.class);
 
@@ -52,13 +60,12 @@ public class EstablecimientoController {
     protected static final String SEARCH_VIEW = "establecimientos/search";
     protected static final String ESTABLECIMIENTO_OF_THE_DAY_FRAGMENT = "fragments/js :: establecimientoOfTheDay";
 
-    protected static final String MODEL_ATTRIBUTE_ESTABLECIMIENTO = "establecimiento";
-    protected static final String MODEL_ATTRIBUTE_ESTABLECIMIENTOS = "establecimientos";
-    protected static final String PARAMETER_ESTABLECIMIENTO_ID = "id";
 
     @Autowired
-    public EstablecimientoController(EstablecimientoService establecimientoService, EstablecimientoFormValidator establecimientoFormValidator) {
+    public EstablecimientoController(EstablecimientoService establecimientoService, CantonService cantonService, TipoEstablecimientoServiceImpl tipoEstablecimientoService, EstablecimientoFormValidator establecimientoFormValidator) {
         this.establecimientoService = establecimientoService;
+        this.cantonService = cantonService;
+        this.tipoEstablecimientoService = tipoEstablecimientoService;
         this.establecimientoFormValidator = establecimientoFormValidator;
     }
 
@@ -68,15 +75,22 @@ public class EstablecimientoController {
         binder.setDisallowedFields("id");
     }
 
+    //Lista de los establecimientos
+    @ModelAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS)
+    public List<Establecimiento> allEstablecimientos() {
+        return establecimientoService.findAll();
+    }
+
     //Lista de los cantones para el establecimiento
     @ModelAttribute(MODEL_ATTRIBUTE_CANTONES)
     public List<Canton> allCantones() {
         return cantonService.findAll();
     }
 
-    @ModelAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS)
-    public List<Establecimiento> allEstablecimientos() {
-        return establecimientoService.findAll();
+    //Lista de los tipos de establecimiento para el establecimiento
+    @ModelAttribute(MODEL_ATTRIBUTE_TIPOS_ESTABL)
+    public List<TipoEstablecimiento> allTiposEstab() {
+        return tipoEstablecimientoService.findAll();
     }
 
     @RequestMapping(value = "/json/establecimiento/{id}", method = GET)
@@ -115,21 +129,20 @@ public class EstablecimientoController {
             logger.debug(e.getMessage());
             return "falló";
         }
-
     }
 
     @RequestMapping(value = "/establecimiento/new", method = RequestMethod.POST)
     public String addEstablecimiento(@Valid Establecimiento establecimiento, BindingResult result, SessionStatus status,
                              RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            logger.debug("Vamos a intentar guardar el establecimiento...!!!!!!!!!!!!!!!");
+            logger.debug("Intentando guardar el establecimiento...!!!!!!!!!!!!!!!");
             return ESTABLECIMIENTO_FORM_VIEW;
         } else {
             EstablecimientoDTO establecimientoDTO = EstablecimientoUtils.establecimientoToEstablecimientoDTO(establecimiento);
             Establecimiento added = establecimientoService.add(establecimientoDTO);
             logger.info("Establecimiento agregado con la siguiente información: {}", added);
             status.setComplete();
-            return "redirect:/establecimientos";
+            return "redirect:/establecimiento/update/"+added.getEstId();
         }
     }
 

@@ -137,9 +137,16 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
         logger.info("Agregando nuevo Establecimiento con información: {}", establecimientoDTO);
 
         //Creates an instance of an establecimiento by using the builder pattern
-        Establecimiento establecimiento = Establecimiento.getBuilder(establecimientoDTO.getCntId(), establecimientoDTO.getEstNombre(),
-                establecimientoDTO.getEstRepresentante(), establecimientoDTO.getEstDireccion(),establecimientoDTO.getEstPagina(),
-                establecimientoDTO.getEstLongitud(), establecimientoDTO.getEstLatitud(),establecimientoDTO.getEstFicheroImagenes(),
+        Establecimiento establecimiento = Establecimiento.getBuilder(
+                establecimientoDTO.getTipoEstId(),
+                establecimientoDTO.getCntId(),
+                establecimientoDTO.getEstNombre(),
+                establecimientoDTO.getEstRepresentante(),
+                establecimientoDTO.getEstDireccion(),
+                establecimientoDTO.getEstPagina(),
+                establecimientoDTO.getEstLongitud(),
+                establecimientoDTO.getEstLatitud(),
+                establecimientoDTO.getEstFicheroImagenes(),
                 establecimientoDTO.getEstAfiliado())
                 .build();
 
@@ -151,7 +158,6 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
                         telefonoDTO.getPhoneType(),
                         telefonoDTO.getPhoneNumber())
                         .build();
-
                 telefonoRepository.save(contactPhone);
             }
         }

@@ -13,14 +13,21 @@ import java.util.List;
 /**
  * Created by Mauricio on 08/05/2017.
  */
-@Service
+@Service("cantonService")
+@Transactional
 public class CantonServiceImpl implements CantonService{
 
     @Autowired
     CantonRepository cantonRepository;
 
+    //Buscar todos los cantones
     @Transactional(readOnly = true)
     public List<Canton> findAll() {
-        return Lists.newArrayList(cantonRepository.findAll());
+        return cantonRepository.findAll();
+    }
+
+    @Override
+    public Canton findOne(Long cntId) {
+        return cantonRepository.findOne(cntId);
     }
 }

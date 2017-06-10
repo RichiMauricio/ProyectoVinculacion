@@ -15,7 +15,9 @@ import java.util.Set;
 public class EstablecimientoDTO {
 
     private Long establecimientoId;
-    private Canton cntId;
+    private Long cntId;
+    private Long tipoEstId;
+
     private Set<TelefonoDTO> contactPhones;
 
     @NotEmpty
@@ -128,12 +130,20 @@ public class EstablecimientoDTO {
         this.estAfiliado = estAfiliado;
     }
 
-    public Canton getCntId() {
+    public Long getCntId() {
         return cntId;
     }
 
-    public void setCntId(Canton cntId) {
+    public void setCntId(Long cntId) {
         this.cntId = cntId;
+    }
+
+    public Long getTipoEstId() {
+        return tipoEstId;
+    }
+
+    public void setTipoEstId(Long tipoEstId) {
+        this.tipoEstId = tipoEstId;
     }
 
     @Override

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Establecimientos</title>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header" id="banner">
+            <div class="row">
+                <div class="col-lg-8 col-md-7 col-sm-6">
+                    <h1 text="Establecimientos">Establecimientos</h1>
+                    <p class="lead">Lista de establecimientos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container bs-container">
+        <div class="row">
+            <div class="bs-section">
+                <div id="message-holder">
+                    <div th:if="${feedbackMessage}"
+                         th:class="'messageblock hidden'"
+                         th:text="${feedbackMessage}"></div>
+                </div>
+
+                <div id="grid-table">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Dirección</th>
+                            <th>Representante</th>
+                            <th>Página web</th>
+                            <th>Cantón</th>
+                            <th>Tipo Establecimiento</th>
+                            <th>Ver</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                        <tr th:each="estab : ${establecimientos}">
+                            <td th:text="${estab.estNombre}">Nombre</td>
+                            <td th:text="${estab.estDireccion}">Dirección</td>
+                            <td th:text="${estab.estRepresentante}">Representante</td>
+                            <td th:text="${estab.estPagina}">Página</td>
+                            <div th:switch="${estab.canton}">
+                                <td th:case="'1'">Baños de Agua Santa</td>
+                                <td th:case="'2'">Amabato</td>
+                                <td th:case="'3'">Cevallos</td>
+                            </div>
+                            <div th:switch="${estab.tipoEstablecimiento}">
+                                <td th:case="'1'">Hotel</td>
+                                <td th:case="'2'">Motel</td>
+                            </div>
+                            <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/'+ estab.estId}">Ver</a></td>
+                            <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/update/'+ estab.estId}">Editar</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-actions col-md-offset-3 col-sm-offset-2 pull-right">
+                <a th:href="@{'/establecimiento/new/'}" text="Agregar nuevo establecimiento" href="establecimientoform.html"
+                   class="btn btn-success">[Add New Establecimiento]</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

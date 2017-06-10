@@ -82,6 +82,7 @@ public class EstablecimientoUtils {
         dto.setEstFicheroImagenes(establecimiento.getEstFicheroImagenes());
         dto.setEstAfiliado(establecimiento.getEstAfiliado());
         dto.setCntId(establecimiento.getCanton());
+        dto.setTipoEstId(establecimiento.getTipoEstablecimiento());
         if (establecimiento.getTelefonos() != null) {
             dto.setContactPhones(
                     establecimiento.getTelefonos().stream().map(TelefonoDTO::new).collect(Collectors.toSet()));
