@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header" id="banner">
+            <div class="row">
+                <div class="col-lg-8 col-md-7 col-sm-6">
+                    <h1 th:text="|${establecimiento.estNombre}|">Establecimiento nombre</h1>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container bs-container big-font-container">
+        <div class="row row-centered">
+            <div class="bs-section col-lg-9 col-centered">
+                <div id="form-table">
+                    <div class="heading">
+                        <h2 text="Detalle del contacto">Detalle del establecimiento</h2>
+                    </div>
+                    <table class="table table-condensed">
+                        <tr>
+                            <td class="td-label">
+                                <div text="Nombre: ">Nombre</div>
+                            </td>
+                            <td>
+                                <div th:text="${establecimiento.estNombre}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">
+                                <div text="Dirección: ">Dirección</div>
+                            </td>
+                            <td>
+                                <div th:text="${establecimiento.estDireccion}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">
+                                <div text="Representante: ">Representante</div>
+                            </td>
+                            <td>
+                                <div th:text="${establecimiento.estRepresentante}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">
+                                <div text="Página web: ">Página web</div>
+                            </td>
+                            <td>
+                                <div th:text="${establecimiento.estPagina}"></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="heading">
+                        <h2 text="Teléfonos">Teléfonos</h2>
+                    </div>
+                    <table class="table table-condensed">
+                        <tr th:each="ph : ${establecimiento.telefonos}">
+                            <td class="td-label">
+                                <div th:text="${ph.tlfTipo}">Tipo de teléfono</div>
+                            </td>
+                            <td>
+                                <div th:text="${ph.tlfNumero}">Número de teléfono</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="heading">
+                        <h2 text="Correos">Correos</h2>
+                    </div>
+                    <table class="table table-condensed">
+                        <tr th:each="co : ${establecimiento.correos}">
+                            <td class="td-label">
+                                <div th:text="${co.correoNombre}">Correo</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

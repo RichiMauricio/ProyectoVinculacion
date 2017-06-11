@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.vinculacion.jpa.dto.EstablecimientoDTO;
 import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
-import com.vinculacion.jpa.model.Canton;
-import com.vinculacion.jpa.model.Establecimiento;
-import com.vinculacion.jpa.model.Telefono;
-import com.vinculacion.jpa.model.TipoEstablecimiento;
+import com.vinculacion.jpa.model.*;
 import com.vinculacion.jpa.model.validators.EstablecimientoFormValidator;
 import com.vinculacion.jpa.service.CantonService;
 import com.vinculacion.jpa.service.EstablecimientoService;
@@ -169,28 +166,51 @@ public class EstablecimientoController {
     }
 
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = { "addEstablecimientoPhone" }, method = RequestMethod.POST)
-    public String addRow(final Establecimiento establecimiento) {
+    public String addPhoneRow(final Establecimiento establecimiento) {
         Telefono establecimientoPhone = Telefono.getBuilder(establecimiento, null, null).build();
         establecimientoPhone.setTlfId(SharedUtils.randomNegativeId());
         establecimiento.getTelefonos().add(establecimientoPhone);
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 
-    @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = {
-            "removeEstablecimientoPhone" }, method = RequestMethod.POST)
-    public String removeRow(final Establecimiento establecimiento, final HttpServletRequest req) throws EstablecimientoNotFoundException {
-        final Long establecimientoPhoneId = Long.valueOf(req.getParameter("removeEstablecimientoPhone"));
+    @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = { "addCorreoEstablecimiento" }, method = RequestMethod.POST)
+    public String addCorreoRow(final Establecimiento establecimiento) {
+        Correo correo = Correo.getBuilder(establecimiento,null).build();
+        correo.setCorreoId(SharedUtils.randomNegativeId());
+        establecimiento.getCorreos().add(correo);
+        return ESTABLECIMIENTO_FORM_VIEW;
+    }
 
+    //Eliminar un teléfono
+    @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = {
+            "removeEstablecimientoPhone"}, method = RequestMethod.POST)
+    public String removePhoneRow(final Establecimiento establecimiento, final HttpServletRequest req) throws EstablecimientoNotFoundException {
+        final Long establecimientoPhoneId = Long.valueOf(req.getParameter("removeEstablecimientoPhone"));
         for (Telefono establecimientoPhone : establecimiento.getTelefonos()) {
             if (establecimientoPhone.getTlfId().equals(establecimientoPhoneId)) {
                 establecimiento.getTelefonos().remove(establecimientoPhone);
                 break;
             }
         }
-
         if (establecimientoPhoneId > 0)
             establecimientoService.deleteEstablecimientoPhoneById(establecimientoPhoneId);
 
+        return ESTABLECIMIENTO_FORM_VIEW;
+    }
+
+    //Eliminar un correo
+    @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = {
+            "removeCorreoEstablecimiento"}, method = RequestMethod.POST)
+    public String removeCorreoRow(final Establecimiento establecimiento, final HttpServletRequest req) throws EstablecimientoNotFoundException {
+        final Long correoEstablecimientoId = Long.valueOf(req.getParameter("removeCorreoEstablecimiento"));
+        for (Correo correo : establecimiento.getCorreos()) {
+            if (correo.getCorreoId().equals(correoEstablecimientoId)) {
+                establecimiento.getCorreos().remove(correo);
+                break;
+            }
+        }
+        if (correoEstablecimientoId > 0)
+            establecimientoService.deleteCorreoEstablecimientoById(correoEstablecimientoId);
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 

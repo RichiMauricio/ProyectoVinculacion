@@ -46,7 +46,6 @@ public class TelefonoDTO {
         this.telefonoId = contactPhoneId;
     }
 
-
     public Long getEstablecimientoId() {
         return establecimientoId;
     }

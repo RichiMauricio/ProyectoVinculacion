@@ -1,12 +1,15 @@
 package com.vinculacion.jpa.service;
 
 import com.google.common.collect.Lists;
+import com.vinculacion.jpa.dto.CorreoDTO;
 import com.vinculacion.jpa.dto.EstablecimientoDTO;
 import com.vinculacion.jpa.dto.TelefonoDTO;
 import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
 import com.vinculacion.jpa.model.Canton;
+import com.vinculacion.jpa.model.Correo;
 import com.vinculacion.jpa.model.Establecimiento;
 import com.vinculacion.jpa.model.Telefono;
+import com.vinculacion.jpa.repository.CorreoRepository;
 import com.vinculacion.jpa.repository.EstablecimientoRepository;
 import com.vinculacion.jpa.repository.TelefonoRepository;
 import org.slf4j.Logger;
@@ -36,6 +39,8 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     @Autowired
     private TelefonoRepository telefonoRepository;
 
+    @Autowired
+    private CorreoRepository correoRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -115,7 +120,6 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
         // Update the Establecimiento phone if updateChildren(true)
 
         if (establecimientoDTO.isUpdateChildren()) {
-
             if (establecimientoDTO.getContactPhones() != null) {
                 for (TelefonoDTO telefonoDTO : establecimientoDTO.getContactPhones()) {
                     Telefono telefono = telefonoRepository.findBytlfId(telefonoDTO.getTelefonoId());
@@ -124,6 +128,20 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
                     } else {
                         telefono = saveContactPhone(found, telefonoDTO);
                         found.getTelefonos().add(telefono);
+                    }
+                }
+            }
+        }
+
+        if (establecimientoDTO.isUpdateChildren()) {
+            if (establecimientoDTO.getCorreosEst() != null) {
+                for (CorreoDTO correoDTO : establecimientoDTO.getCorreosEst()) {
+                    Correo correo = correoRepository.findBycorreoId(correoDTO.getCorreoId());
+                    if (correo != null) {
+                        correo.update(correoDTO.getCorreoNombre());
+                    } else {
+                        correo = saveEstablecimientoCorreo(found, correoDTO);
+                        found.getCorreos().add(correo);
                     }
                 }
             }
@@ -177,11 +195,22 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
 
         Telefono contactPhone = telefonoRepository.findOne(contactPhoneId);
         if (contactPhone != null) {
-            logger.info("Removing Establecimiento phone with information: {}", contactPhone);
+            logger.info("Quitando el teléfono del establecimiento con información: {}", contactPhone);
             telefonoRepository.delete(contactPhone);
         }
 
         return contactPhone;
+    }
+
+    @Override
+    public Correo deleteCorreoEstablecimientoById(Long correoId) throws EstablecimientoNotFoundException {
+        Correo correo = correoRepository.findOne(correoId);
+        if (correo != null) {
+            logger.info("Quitando el correo del establecimiento con información: {}", correo);
+            correoRepository.delete(correo);
+        }
+
+        return correo;
     }
 
     @Transactional(readOnly = true)
@@ -208,7 +237,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
 
     // endregion
 
-    // region Private Establecimiento Phone Method
+    // region privada para guardar los correos y teléfonos
     @Transactional
     private Telefono saveContactPhone(Establecimiento establecimiento, TelefonoDTO telefonoDTO) {
         Telefono contactPhone = Telefono.getBuilder(establecimiento,
@@ -217,6 +246,15 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
                 .build();
 
         return telefonoRepository.save(contactPhone);
+    }
+
+    @Transactional
+    private Correo saveEstablecimientoCorreo(Establecimiento establecimiento, CorreoDTO correoDTO) {
+        Correo establecimientoCorreo = Correo.getBuilder(establecimiento,
+                correoDTO.getCorreoNombre())
+                .build();
+
+        return correoRepository.save(establecimientoCorreo);
     }
 
     // endregion

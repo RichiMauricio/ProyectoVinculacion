@@ -19,6 +19,7 @@ public class EstablecimientoDTO {
     private Long tipoEstId;
 
     private Set<TelefonoDTO> contactPhones;
+    private Set<CorreoDTO> correosEst;
 
     @NotEmpty
     @Length(max = Establecimiento.MAX_LENGTH_ESTABLECIMIENTO_NOMBRE)
@@ -64,6 +65,14 @@ public class EstablecimientoDTO {
 
     public void setContactPhones(Set<TelefonoDTO> contactPhones) {
         this.contactPhones = contactPhones;
+    }
+
+    public Set<CorreoDTO> getCorreosEst() {
+        return correosEst;
+    }
+
+    public void setCorreosEst(Set<CorreoDTO> correosEst) {
+        this.correosEst = correosEst;
     }
 
     public String getEstNombre() {

@@ -81,8 +81,8 @@ public class Correo {
         this.correoNombre = correoNombre;
     }
 
-    public static Correo.Builder getBuilder(Establecimiento establecimiento, String correoNombre) {
-        return new Correo.Builder(establecimiento, correoNombre);
+    public static Builder getBuilder(Establecimiento establecimiento, String correoNombre) {
+        return new Builder(establecimiento, correoNombre);
     }
 
     public static class Builder {

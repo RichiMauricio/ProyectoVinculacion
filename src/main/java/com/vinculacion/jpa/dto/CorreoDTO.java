@@ -41,7 +41,6 @@ public class CorreoDTO {
         this.correoId = correoId;
     }
 
-
     public Long getEstablecimientoId() {
         return establecimientoId;
     }
@@ -57,7 +56,6 @@ public class CorreoDTO {
     public void setCorreoNombre(String correoNombre) {
         this.correoNombre = correoNombre;
     }
-
 
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package com.vinculacion.jpa.service;
 
 import com.vinculacion.jpa.model.Canton;
+import com.vinculacion.jpa.model.Correo;
 import com.vinculacion.jpa.model.Establecimiento;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public interface EstablecimientoService {
     Telefono addContactPhone(TelefonoDTO contactPhoneDTO);
     Telefono findContactPhoneById(Long contactPhoneID);
     Telefono deleteEstablecimientoPhoneById(Long contactPhoneId) throws EstablecimientoNotFoundException;
+    Correo deleteCorreoEstablecimientoById(Long correoId) throws EstablecimientoNotFoundException;
 
     // endregion
 }

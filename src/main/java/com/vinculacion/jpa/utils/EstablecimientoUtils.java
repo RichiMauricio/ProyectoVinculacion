@@ -1,5 +1,6 @@
 package com.vinculacion.jpa.utils;
 
+import com.vinculacion.jpa.dto.CorreoDTO;
 import com.vinculacion.jpa.dto.EstablecimientoDTO;
 import com.vinculacion.jpa.dto.TelefonoDTO;
 import com.vinculacion.jpa.model.Establecimiento;
@@ -86,6 +87,10 @@ public class EstablecimientoUtils {
         if (establecimiento.getTelefonos() != null) {
             dto.setContactPhones(
                     establecimiento.getTelefonos().stream().map(TelefonoDTO::new).collect(Collectors.toSet()));
+        }
+        if (establecimiento.getCorreos() != null) {
+            dto.setCorreosEst(
+                    establecimiento.getCorreos().stream().map(CorreoDTO::new).collect(Collectors.toSet()));
         }
         return dto;
     }
