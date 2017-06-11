@@ -253,7 +253,7 @@ public class EstablecimientoController {
         Collection<Establecimiento> results = null;
 
         if (StringUtils.isEmpty(establecimiento.getEstNombre())) {
-            // allow parameterless GET request to return all establecimientos
+            // muestra todos los establecimientos que coinciden con ese nombre
             return "redirect:/establecimientos/";
         } else {
             results = this.establecimientoService.searchByNombre(establecimiento.getEstNombre());
@@ -261,8 +261,9 @@ public class EstablecimientoController {
 
         if (results.size() < 1) {
             // establecimientos no encontrados
-            result.rejectValue("Nombre", "establecimiento.busqueda.noEncontrada", new Object[] { establecimiento.getEstNombre() },
-                    "no escontrado");
+            //result.rejectValue("Nombre", "establecimiento.busqueda.noEncontrada", new Object[] { establecimiento.getEstNombre() },
+            //        "no escontrado");
+
             return SEARCH_VIEW;
         }
 
