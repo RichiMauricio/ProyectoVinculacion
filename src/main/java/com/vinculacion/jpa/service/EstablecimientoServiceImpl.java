@@ -9,6 +9,7 @@ import com.vinculacion.jpa.model.Canton;
 import com.vinculacion.jpa.model.Correo;
 import com.vinculacion.jpa.model.Establecimiento;
 import com.vinculacion.jpa.model.Telefono;
+import com.vinculacion.jpa.model.validators.ExtendedEmailValidator;
 import com.vinculacion.jpa.repository.CorreoRepository;
 import com.vinculacion.jpa.repository.EstablecimientoRepository;
 import com.vinculacion.jpa.repository.TelefonoRepository;
@@ -111,14 +112,12 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     @Transactional(rollbackFor = EstablecimientoNotFoundException.class)
     @Override
     public Establecimiento update(EstablecimientoDTO establecimientoDTO) throws EstablecimientoNotFoundException {
-        logger.info("Actualizando establecimiento on información: {}", establecimientoDTO);
-
         Establecimiento found = findEstablecimientoById(establecimientoDTO.getEstablecimientoId());
-
         // Update the Establecimiento information
-        found.update(establecimientoDTO.getEstNombre(), establecimientoDTO.getEstRepresentante(), establecimientoDTO.getEstDireccion(), establecimientoDTO.getEstPagina(), establecimientoDTO.getEstLongitud(), establecimientoDTO.getEstLatitud(), establecimientoDTO.getEstFicheroImagenes(), establecimientoDTO.getEstAfiliado());
+        found.update(establecimientoDTO.getEstNombre(), establecimientoDTO.getEstRepresentante(),
+                establecimientoDTO.getEstDireccion(), establecimientoDTO.getEstPagina(), establecimientoDTO.getEstLongitud(),
+                establecimientoDTO.getEstLatitud(), establecimientoDTO.getEstFicheroImagenes(), establecimientoDTO.getEstAfiliado());
         // Update the Establecimiento phone if updateChildren(true)
-
         if (establecimientoDTO.isUpdateChildren()) {
             if (establecimientoDTO.getContactPhones() != null) {
                 for (TelefonoDTO telefonoDTO : establecimientoDTO.getContactPhones()) {
@@ -133,19 +132,20 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
             }
         }
 
-        if (establecimientoDTO.isUpdateChildren()) {
-            if (establecimientoDTO.getCorreosEst() != null) {
-                for (CorreoDTO correoDTO : establecimientoDTO.getCorreosEst()) {
-                    Correo correo = correoRepository.findBycorreoId(correoDTO.getCorreoId());
-                    if (correo != null) {
-                        correo.update(correoDTO.getCorreoNombre());
-                    } else {
-                        correo = saveEstablecimientoCorreo(found, correoDTO);
-                        found.getCorreos().add(correo);
+            if (establecimientoDTO.isUpdateChildren()) {
+                if (establecimientoDTO.getCorreosEst() != null) {
+                    for (CorreoDTO correoDTO : establecimientoDTO.getCorreosEst()) {
+                        Correo correo = correoRepository.findBycorreoId(correoDTO.getCorreoId());
+                        if (correo != null) {
+                            correo.update(correoDTO.getCorreoNombre());
+                        } else {
+                            correo = saveEstablecimientoCorreo(found, correoDTO);
+                            found.getCorreos().add(correo);
+                        }
                     }
                 }
             }
-        }
+
         return found;
     }
 

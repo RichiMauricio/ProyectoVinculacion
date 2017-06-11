@@ -1,6 +1,7 @@
 package com.vinculacion.jpa.model;
 
 import com.vinculacion.jpa.dto.CorreoDTO;
+import com.vinculacion.jpa.model.validators.ExtendedEmailValidator;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.core.style.ToStringCreator;
 
@@ -45,6 +46,7 @@ public class Correo {
     }
 
     @Basic
+    @ExtendedEmailValidator
     @Column(name = "correoNombre", nullable = false, insertable = true, updatable = true, length = MAX_LENGTH_CORREO_NOMBRE)
     @NotEmpty
     public String getCorreoNombre() {

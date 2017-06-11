@@ -217,18 +217,22 @@ public class EstablecimientoController {
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", method = RequestMethod.POST)
     public String updateEstablecimiento(@Valid @ModelAttribute("establecimiento") Establecimiento establecimiento, BindingResult result,
                                 RedirectAttributes attributes, Model model) throws EstablecimientoNotFoundException {
-        if (result.hasErrors()) {
+        try{
+            if (result.hasErrors()) {
+                return ESTABLECIMIENTO_FORM_VIEW;
+            } else {
+
+                EstablecimientoDTO establecimientoDTO = EstablecimientoUtils.establecimientoToEstablecimientoDTO(establecimiento);
+                establecimientoDTO.setUpdateChildren(true);
+                this.establecimientoService.update(establecimientoDTO);
+                attributes.addAttribute(PARAMETER_ESTABLECIMIENTO_ID, establecimientoDTO.getEstablecimientoId());
+
+                return "redirect:/establecimientos";
+            }
+        }catch (Exception e){
             return ESTABLECIMIENTO_FORM_VIEW;
-        } else {
-
-            EstablecimientoDTO establecimientoDTO = EstablecimientoUtils.establecimientoToEstablecimientoDTO(establecimiento);
-            establecimientoDTO.setUpdateChildren(true);
-            this.establecimientoService.update(establecimientoDTO);
-
-            attributes.addAttribute(PARAMETER_ESTABLECIMIENTO_ID, establecimientoDTO.getEstablecimientoId());
-
-            return "redirect:/establecimientos";
         }
+
 
     }
 

@@ -2,6 +2,7 @@ package com.vinculacion.jpa.dto;
 
 import com.vinculacion.jpa.model.Correo;
 import com.vinculacion.jpa.model.Telefono;
+import com.vinculacion.jpa.model.validators.ExtendedEmailValidator;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -15,6 +16,7 @@ public class CorreoDTO {
     private Long establecimientoId;
 
     @NotEmpty
+    @ExtendedEmailValidator
     @Length(max = Correo.MAX_LENGTH_CORREO_NOMBRE)
     private String correoNombre;
 
