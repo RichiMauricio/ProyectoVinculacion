@@ -96,18 +96,13 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
         return found;
     }
 
-/*
-    @Transactional(rollbackFor = ContactNotFoundException.class)
+    @Transactional(rollbackFor = EstablecimientoNotFoundException.class)
     @Override
-    public Contact deleteById(Long id) throws ContactNotFoundException {
-        logger.info("Deleting contact by id: {}", id);
-
-        Contact deleted = findContactById(id);
-        contactRepository.delete(deleted);
-
-        logger.debug("Deleted contact: {}", deleted);
+    public Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException {
+        Establecimiento deleted = findEstablecimientoById(id);
+        establecimientoRepository.delete(deleted);
         return deleted;
-    }*/
+    }
 
     @Transactional(rollbackFor = EstablecimientoNotFoundException.class)
     @Override

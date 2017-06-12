@@ -225,6 +225,13 @@ public class EstablecimientoController {
         return SEARCH_VIEW;
     }
 
+    //Eliminar un establecimiento
+    @RequestMapping(value = "/establecimiento/delete/{establecimientoId}", method = GET)
+    public String delete(@PathVariable("establecimientoId") Long estId) throws EstablecimientoNotFoundException {
+        establecimientoService.deleteById(estId);
+        return "redirect:/establecimientos/list";
+    }
+
     //Resultado de la búsqueda de un establecimiento
     @RequestMapping(value = "/establecimientos/list", method = RequestMethod.GET)
     public String processFindForm(Establecimiento establecimiento, BindingResult result, Model model, HttpSession session) {

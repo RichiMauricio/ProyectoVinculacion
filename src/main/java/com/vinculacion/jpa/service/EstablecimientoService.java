@@ -28,7 +28,7 @@ public interface EstablecimientoService {
     Establecimiento findEstablecimientoById(Long ID) throws EstablecimientoNotFoundException;
     //Contact getContactByEmail(String email);
     Establecimiento getEstablecimientoByIdWithDetail(Long ID);
-    //Contact deleteById(Long id) throws ContactNotFoundException;
+    Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException;
 
     // endregion
 
