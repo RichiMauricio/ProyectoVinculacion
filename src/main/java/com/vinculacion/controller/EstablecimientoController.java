@@ -1,7 +1,5 @@
 package com.vinculacion.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.vinculacion.jpa.dto.EstablecimientoDTO;
 import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
 import com.vinculacion.jpa.model.*;
@@ -47,7 +45,6 @@ public class EstablecimientoController {
     protected static final String MODEL_ATTRIBUTE_ESTABLECIMIENTO = "establecimiento";
     protected static final String MODEL_ATTRIBUTE_ESTABLECIMIENTOS = "establecimientos";
     protected static final String PARAMETER_ESTABLECIMIENTO_ID = "id";
-    protected static final String MODEL_ATTRIBUTE_CANTON = "canton";
 
     private static final Logger logger = LoggerFactory.getLogger(Establecimiento.class);
 
@@ -55,9 +52,8 @@ public class EstablecimientoController {
     protected static final String ESTABLECIMIENTO_LIST_VIEW = "establecimientos/list";
     protected static final String ESTABLECIMIENTO_FORM_VIEW = "establecimientos/establecimientoform";
     protected static final String SEARCH_VIEW = "establecimientos/search";
-    protected static final String ESTABLECIMIENTO_OF_THE_DAY_FRAGMENT = "fragments/js :: establecimientoOfTheDay";
 
-
+    //Constructor
     @Autowired
     public EstablecimientoController(EstablecimientoService establecimientoService, CantonService cantonService, TipoEstablecimientoServiceImpl tipoEstablecimientoService, EstablecimientoFormValidator establecimientoFormValidator) {
         this.establecimientoService = establecimientoService;
@@ -71,6 +67,8 @@ public class EstablecimientoController {
         binder.addValidators(establecimientoFormValidator);
         binder.setDisallowedFields("id");
     }
+
+    //-------MODEL ATRIBUTES---------
 
     //Lista de los establecimientos
     @ModelAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS)
@@ -90,32 +88,10 @@ public class EstablecimientoController {
         return tipoEstablecimientoService.findAll();
     }
 
-    @RequestMapping(value = "/json/establecimiento/{id}", method = GET)
-    public @ResponseBody
-    EstablecimientoDTO establecimientoById(@PathVariable Long id) throws EstablecimientoNotFoundException {
-        Establecimiento establecimiento = establecimientoService.findEstablecimientoById(id);
-        ObjectMapper jacksonMapper = new ObjectMapper();
-        jacksonMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+    //-------FIN MODEL ATRIBUTES---------
 
-        return EstablecimientoUtils.establecimientoToEstablecimientoDTO(establecimiento);
-    }
-
-    @RequestMapping(value = "/json/cod", method = GET)
-    public String establecimientoOfTheDay(final Model model) throws EstablecimientoNotFoundException {
-        Establecimiento establecimiento = establecimientoService.findEstablecimientoById(EstablecimientoUtils.randomEstablecimientoId());
-        model.addAttribute("cod", establecimiento);
-        return ESTABLECIMIENTO_OF_THE_DAY_FRAGMENT;
-
-    }
-
-    /*@RequestMapping(value = "/json/secret", method = GET)
-    public @ResponseBody
-    Map<String, String> secretMessage() {
-        Map<String, String> map = new HashMap<>();
-        map.put("message", webUI.getMessage("js.secret.message"));
-        return map;
-    }*/
-
+    //---------MAPPINGS------------
+    //Agregar nuevo establecimiento
     @RequestMapping(value = "/establecimiento/new", method = RequestMethod.GET)
     public String initAddEstablecimientoForm(Model model) {
         try{
@@ -143,6 +119,7 @@ public class EstablecimientoController {
         }
     }
 
+    //Mostrar un establecimiento
     @RequestMapping(value = "/establecimiento/{establecimientotId}", method = GET)
     public String establecimientoDisplayPage(@PathVariable("establecimientotId") Long id, Model model) throws EstablecimientoNotFoundException {
         logger.debug("Mostrando página de establecimiento con id: {}", id);
@@ -154,17 +131,15 @@ public class EstablecimientoController {
         return ESTABLECIMIENTO_VIEW;
     }
 
+    //Actualizar un establecimiento
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", method = GET)
     public String establecimientoEditPage(@PathVariable("establecimientoId") Long id, Model model) throws EstablecimientoNotFoundException {
-        logger.debug("Mostrando establecimiento actualizado con id: {}", id);
-
         Establecimiento found = establecimientoService.getEstablecimientoByIdWithDetail(id);
-        logger.debug("Establecimiento encontrado: {}", found);
-
         model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTO, found);
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 
+    //Actualizar teléfonos
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = { "addEstablecimientoPhone" }, method = RequestMethod.POST)
     public String addPhoneRow(final Establecimiento establecimiento) {
         Telefono establecimientoPhone = Telefono.getBuilder(establecimiento, null, null).build();
@@ -173,6 +148,7 @@ public class EstablecimientoController {
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 
+    //Actualizar correos
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = { "addCorreoEstablecimiento" }, method = RequestMethod.POST)
     public String addCorreoRow(final Establecimiento establecimiento) {
         Correo correo = Correo.getBuilder(establecimiento,null).build();
@@ -214,6 +190,7 @@ public class EstablecimientoController {
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 
+    //Guardar cambios del establecimiento
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", method = RequestMethod.POST)
     public String updateEstablecimiento(@Valid @ModelAttribute("establecimiento") Establecimiento establecimiento, BindingResult result,
                                 RedirectAttributes attributes, Model model) throws EstablecimientoNotFoundException {
@@ -232,43 +209,39 @@ public class EstablecimientoController {
         }catch (Exception e){
             return ESTABLECIMIENTO_FORM_VIEW;
         }
-
-
     }
 
+    //Mostrar todos los establecimientos
     @RequestMapping(value = "/establecimientos", method = GET)
     public String showEstablecimientosPage(Model model) {
         logger.debug("Mostrando toda la página de establecimientos");
         return ESTABLECIMIENTO_LIST_VIEW;
     }
 
+    //Buscar un estbalecimiento
     @RequestMapping(value = "/establecimientos/search", method = GET)
     public String search(Model model, HttpServletRequest request) {
         model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTO, new Establecimiento());
         return SEARCH_VIEW;
     }
 
+    //Resultado de la búsqueda de un establecimiento
     @RequestMapping(value = "/establecimientos/list", method = RequestMethod.GET)
     public String processFindForm(Establecimiento establecimiento, BindingResult result, Model model, HttpSession session) {
         Collection<Establecimiento> results = null;
-
+        //Verificar que no esté vacío el formulario
         if (StringUtils.isEmpty(establecimiento.getEstNombre())) {
-            // muestra todos los establecimientos que coinciden con ese nombre
             return "redirect:/establecimientos/";
         } else {
             results = this.establecimientoService.searchByNombre(establecimiento.getEstNombre());
         }
-
         if (results.size() < 1) {
             // establecimientos no encontrados
-            //result.rejectValue("Nombre", "establecimiento.busqueda.noEncontrada", new Object[] { establecimiento.getEstNombre() },
-            //        "no escontrado");
-
+            result.rejectValue("estNombre", "establecimiento.busqueda.noEncontrada", new Object[] { establecimiento.getEstNombre() },
+                    "no escontrado");
             return SEARCH_VIEW;
         }
-
         session.setAttribute("buscarNombre", establecimiento.getEstNombre());
-
         if (results.size() > 1) {
             // múltiples establecimientos encontrados
             model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS, results);
@@ -279,5 +252,5 @@ public class EstablecimientoController {
             return "redirect:/establecimiento/" + establecimiento.getEstId();
         }
     }
-
+    //---------FIN MAPPINGS------------
 }

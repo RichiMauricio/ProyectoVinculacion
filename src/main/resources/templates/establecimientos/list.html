@@ -37,20 +37,13 @@
                             <th>Editar</th>
                             <th>Eliminar</th>
                         </tr>
-                        <tr th:each="estab : ${establecimientos}">
+                        <tr th:each="estab : ${establecimientos}"  th:with="canton= ${cantones[estab.canton - 1]},tipoEst= ${tipoEstablecimiento[estab.tipoEstablecimiento - 1]}">
                             <td th:text="${estab.estNombre}">Nombre</td>
                             <td th:text="${estab.estDireccion}">Dirección</td>
                             <td th:text="${estab.estRepresentante}">Representante</td>
                             <td th:text="${estab.estPagina}">Página</td>
-                            <div th:switch="${estab.canton}">
-                                <td th:case="'1'">Baños de Agua Santa</td>
-                                <td th:case="'2'">Amabato</td>
-                                <td th:case="'3'">Cevallos</td>
-                            </div>
-                            <div th:switch="${estab.tipoEstablecimiento}">
-                                <td th:case="'1'">Hotel</td>
-                                <td th:case="'2'">Motel</td>
-                            </div>
+                            <td th:text="${canton.cntNombre}"></td>
+                            <td th:text="${tipoEst.tipoEstNombre}"></td>
                             <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/'+ estab.estId}">Ver</a></td>
                             <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/update/'+ estab.estId}">Editar</a></td>
                         </tr>

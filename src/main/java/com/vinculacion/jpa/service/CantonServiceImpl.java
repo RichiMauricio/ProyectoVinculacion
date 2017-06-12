@@ -30,4 +30,14 @@ public class CantonServiceImpl implements CantonService{
     public Canton findOne(Long cntId) {
         return cantonRepository.findOne(cntId);
     }
+
+    @Override
+    public Canton getCantonById(Long ID) {
+        return cantonRepository.findByCantonId(ID);
+    }
+
+    @Transactional(readOnly = true)
+    public Canton getEstablecimientoByIdWithDetail(Long ID) {
+        return cantonRepository.findByCantonId(ID);
+    }
 }

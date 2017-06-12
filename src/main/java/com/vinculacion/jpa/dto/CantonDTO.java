@@ -22,6 +22,7 @@ public class CantonDTO {
 
     private String cntArea;
 
+    @Length(max = Canton.DIMENSION_DESCRIPCION_CANTON)
     private String cntDescripcion;
 
     private boolean updateChildren = true;

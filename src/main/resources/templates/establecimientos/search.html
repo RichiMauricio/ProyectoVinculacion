@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Búsqueda</title>
+    <title>Buscar</title>
 </head>
 <body onload="$('input[name=estNombre]').focus();">
 
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-8 col-md-7 col-sm-6">
                 <h1 text="Buscar establecimiento">Buscar establecimiento</h1>
-                <p class="lead">Buscar establecimiento por nombre</p>
+                <p class="lead">Buscar establecimiento</p>
             </div>
         </div>
     </div>
@@ -22,6 +22,7 @@
                   class="form-horizontal" id="search-owner-form">
                 <table class="table table-striped">
                     <tr th:classappend="${#fields.hasErrors('estNombre')} ? 'has-error'">
+                        <h3>Buscar</h3>
                         <td class="col-sm-1">
                             <div class="control-group" th:classappend="${#fields.hasErrors('estNombre')} ? 'error'">
                                 <label class="control-label">Nombre del establecimiento</label>
@@ -29,10 +30,27 @@
                         </td>
                         <td class="col-sm-2">
                             <div class="controls">
-                                <input type="text" class="form-control" th:field="*{estNombre}" name="estNombre" size="30" maxlength="80" />
+                                <input type="text" class="form-control" th:field="*{estNombre}" name="estNombre" size="30"
+                                       maxlength="80" />
                             </div>
                             <div class="controls" th:if="${#fields.hasErrors('estNombre')}">
                                 <h4><span class="label label-danger" th:errors="*{estNombre}">[Errors]</span></h4>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('estRepresentante')} ? 'has-error'">
+                        <td class="col-sm-1">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('estRepresentante')} ? 'error'">
+                                <label class="control-label">Nombre del Representante</label>
+                            </div>
+                        </td>
+                        <td class="col-sm-2">
+                            <div class="controls">
+                                <input type="text" class="form-control" th:field="*{estRepresentante}" name="estRepresentante"
+                                       size="30" maxlength="80" />
+                            </div>
+                            <div class="controls" th:if="${#fields.hasErrors('estRepresentante')}">
+                                <h4><span class="label label-danger" th:errors="*{estRepresentante}">[Errors]</span></h4>
                             </div>
                         </td>
                     </tr>

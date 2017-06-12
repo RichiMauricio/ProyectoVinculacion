@@ -10,4 +10,5 @@ import java.util.List;
 public interface CantonService {
     List<Canton> findAll();
     Canton findOne(Long cntId);
+    Canton getCantonById(Long ID);
 }

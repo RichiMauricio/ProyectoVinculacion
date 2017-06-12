@@ -25,7 +25,6 @@ public class EstablecimientoDTO {
     @Length(max = Establecimiento.MAX_LENGTH_ESTABLECIMIENTO_NOMBRE)
     private String estNombre;
 
-    @NotEmpty
     @Length(max = Establecimiento.MAX_LENGTH_ESTABLECIMIENTO_REPRESENTANTE)
     private String estRepresentante;
 

@@ -24,9 +24,11 @@ public class Canton implements Serializable{
     private String cntNombre;
     private Double cntArea;
     private String cntDescripcion;
+    private Integer cntPoblacion;
     private Set<Establecimiento> establecimientos;
 
     public static final int DIMENSION_NOMBRE_CANTON = 40;
+    public static final int DIMENSION_DESCRIPCION_CANTON = 3000;
 
     @Transient
     public boolean isNew() {
@@ -64,7 +66,6 @@ public class Canton implements Serializable{
     }
 
     @Column(name = "cntDescripcion", unique = false, nullable = true, updatable = true)
-
     public String getCntDescripcion() {
         return cntDescripcion;
     }
@@ -72,6 +73,16 @@ public class Canton implements Serializable{
     public void setCntDescripcion(String cntDescripcion) {
         this.cntDescripcion = cntDescripcion;
     }
+
+    @Column(name = "cntPoblacion", unique = false, nullable = true, updatable = true)
+    public Integer getCntPoblacion() {
+        return cntPoblacion;
+    }
+
+    public void setCntPoblacion(Integer poblacion) {
+        this.cntPoblacion = poblacion;
+    }
+
 
     /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "fkEvtCnt")
     private List<Canton> fkEvtCnt;*/
@@ -92,6 +103,7 @@ public class Canton implements Serializable{
                 .append("new", this.isNew())
                 .append("area", this.getCntArea())
                 .append("descripcion", this.getCntDescripcion())
+                .append("poblacion", this.getCntPoblacion())
                 .toString();
     }
 
@@ -101,19 +113,20 @@ public class Canton implements Serializable{
         this.cntDescripcion = descripcion;
     }
 
-    public static Builder getBuilder(String nombre, Double area, String descripcion) {
-        return new Builder(nombre, area, descripcion);
+    public static Builder getBuilder(String nombre, Double area, String descripcion, Integer poblacion) {
+        return new Builder(nombre, area, descripcion, poblacion);
     }
 
     public static class Builder {
 
         private Canton built;
 
-        public Builder(String nombre, Double area, String descripcion) {
+        public Builder(String nombre, Double area, String descripcion, Integer poblacion) {
             built = new Canton();
             built.cntNombre = nombre;
             built.cntArea = area;
             built.cntDescripcion = descripcion;
+            build().cntPoblacion = poblacion;
         }
 
         public Canton build() {
