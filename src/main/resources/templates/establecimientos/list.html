@@ -5,17 +5,6 @@
     <title>Establecimientos</title>
 </head>
 <body>
-    <script language="JavaScript">
-        function aviso(url,id){
-            if (!confirm("ALERTA!! va a proceder a eliminar este registro, si desea eliminarlo de click en ACEPTAR\n de lo contrario de click en CANCELAR.")) {
-                return false;
-            }
-            else {
-                document.location = url;
-                return true;
-            }
-        }
-    </script>
     <div class="container">
         <div class="page-header" id="banner">
             <div class="row">
@@ -57,7 +46,7 @@
                             <td th:text="${tipoEst.tipoEstNombre}"></td>
                             <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/'+ estab.estId}">Ver</a></td>
                             <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/update/'+ estab.estId}">Editar</a></td>
-                            <td ><a th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/delete/'+ estab.estId}">Eliminar</a></td>
+                            <td ><a onclick="return confirm('¿Seguro que desea eliminar el registro?')" th:href="${'/vinculaciontungurahua-0.0.1-SNAPSHOT/establecimiento/delete/'+ estab.estId}">Eliminar</a></td>
                         </tr>
                     </table>
                 </div>
