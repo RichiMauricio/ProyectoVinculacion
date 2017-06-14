@@ -9,6 +9,7 @@ import com.vinculacion.jpa.service.EstablecimientoService;
 import com.vinculacion.jpa.service.TipoEstablecimientoServiceImpl;
 import com.vinculacion.jpa.utils.EstablecimientoUtils;
 import com.vinculacion.jpa.utils.SharedUtils;
+import jdk.nashorn.internal.runtime.Debug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,8 +108,11 @@ public class EstablecimientoController {
     @RequestMapping(value = "/establecimiento/new", method = RequestMethod.POST)
     public String addEstablecimiento(@Valid Establecimiento establecimiento, BindingResult result, SessionStatus status,
                              RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            logger.debug("Intentando guardar el establecimiento...!!!!!!!!!!!!!!!");
+        Collection<Establecimiento> yaExiste = null;
+        yaExiste = establecimientoService.getEstablecimientoByNombre(establecimiento.getEstNombre());
+        if (result.hasErrors()||(yaExiste.size()>1)) {
+            result.rejectValue("estNombre", "establecimiento.agregacion.noAgregada", new Object[] { establecimiento.getEstNombre() },
+                    "ya existe un establecimiento con ese nombre");
             return ESTABLECIMIENTO_FORM_VIEW;
         } else {
             EstablecimientoDTO establecimientoDTO = EstablecimientoUtils.establecimientoToEstablecimientoDTO(establecimiento);
@@ -218,13 +222,6 @@ public class EstablecimientoController {
         return ESTABLECIMIENTO_LIST_VIEW;
     }
 
-    //Buscar un estbalecimiento
-    @RequestMapping(value = "/establecimientos/search", method = GET)
-    public String search(Model model, HttpServletRequest request) {
-        model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTO, new Establecimiento());
-        return SEARCH_VIEW;
-    }
-
     //Eliminar un establecimiento
     @RequestMapping(value = "/establecimiento/delete/{establecimientoId}", method = GET)
     public String delete(@PathVariable("establecimientoId") Long estId) throws EstablecimientoNotFoundException {
@@ -232,31 +229,47 @@ public class EstablecimientoController {
         return "redirect:/establecimientos/list";
     }
 
+    //Buscar un estbalecimiento
+    @RequestMapping(value = "/establecimientos/search", method = GET)
+    public String search(Model model, HttpServletRequest request) {
+        model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTO, new Establecimiento());
+        return SEARCH_VIEW;
+    }
+
     //Resultado de la búsqueda de un establecimiento
     @RequestMapping(value = "/establecimientos/list", method = RequestMethod.GET)
     public String processFindForm(Establecimiento establecimiento, BindingResult result, Model model, HttpSession session) {
         Collection<Establecimiento> results = null;
-        //Verificar que no esté vacío el formulario
-        if (StringUtils.isEmpty(establecimiento.getEstNombre())) {
-            return "redirect:/establecimientos/";
-        } else {
-            results = this.establecimientoService.searchByNombre(establecimiento.getEstNombre());
-        }
-        if (results.size() < 1) {
-            // establecimientos no encontrados
-            result.rejectValue("estNombre", "establecimiento.busqueda.noEncontrada", new Object[] { establecimiento.getEstNombre() },
-                    "no escontrado");
-            return SEARCH_VIEW;
-        }
-        session.setAttribute("buscarNombre", establecimiento.getEstNombre());
-        if (results.size() > 1) {
-            // múltiples establecimientos encontrados
-            model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS, results);
-            return ESTABLECIMIENTO_LIST_VIEW;
-        } else {
-            // 1 establecimiento encontrado
-            establecimiento = results.iterator().next();
-            return "redirect:/establecimiento/" + establecimiento.getEstId();
+        int cntId = Integer.parseInt(String.valueOf(establecimiento.getCanton()));
+        int tipoEstId = Integer.parseInt(String.valueOf(establecimiento.getTipoEstablecimiento()));
+        try{
+            //Verificar que no esté vacío el formulario
+            if (StringUtils.isEmpty(establecimiento.getEstNombre())  && (StringUtils.isEmpty(establecimiento.getEstRepresentante()))) {
+                results = this.establecimientoService.getEstablecimientoByCantonyTipo(cntId,tipoEstId);
+            } else if(StringUtils.isEmpty(establecimiento.getEstRepresentante())){
+                results = this.establecimientoService.getEstablecimientoByNombre(establecimiento.getEstNombre());
+            }else{
+                results = this.establecimientoService.getEstablecimientoByRepresentante(establecimiento.getEstRepresentante());
+            }
+            if (results.size() < 1) {
+                // establecimientos no encontrados
+                result.rejectValue("estNombre", "establecimiento.busqueda.noEncontrada", new Object[] { establecimiento.getEstNombre() },
+                        "no escontrado");
+                return SEARCH_VIEW;
+            }
+            session.setAttribute("buscarNombre", establecimiento.getEstNombre());
+            if (results.size() > 1) {
+                // múltiples establecimientos encontrados
+                model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTOS, results);
+                return ESTABLECIMIENTO_LIST_VIEW;
+            } else {
+                // 1 establecimiento encontrado
+                establecimiento = results.iterator().next();
+                return "redirect:/establecimiento/" + establecimiento.getEstId();
+            }
+        }catch (Exception e){
+            logger.debug("Excepción encontrada: " + e.getMessage());
+            return "valimos";
         }
     }
     //---------FIN MAPPINGS------------

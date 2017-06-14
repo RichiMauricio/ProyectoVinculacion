@@ -23,8 +23,18 @@ public interface EstablecimientoRepository extends JpaRepository<Establecimiento
             "e.telefonos p")
     List<Establecimiento> findAllWithDetail();
 
-    @Query("select c from Establecimiento c where c.estNombre like %:estNombre%")
-    List<Establecimiento> searchByestNombre(@Param("estNombre") String estNombre);
+    @Query("select c from Establecimiento c where c.estNombre like %:estNombre% ")
+    List<Establecimiento> findByEstNombre(@Param("estNombre") String estNombre);
+
+    @Query("select c from Establecimiento c where c.estRepresentante like %:estRepresentante% ")
+    List<Establecimiento> findByestRepresentante(@Param("estRepresentante") String estRepresentante);
+
+    @Query("select c from Establecimiento c where c.estRepresentante like %:estRepresentante% or c.canton like %:canton%")
+    List<Establecimiento> findByParams(@Param("estRepresentante") String estRepresentante, @Param("canton") Long canton);
+
+    //Buscar establecimientos poe cantón y tipo de establecimiento
+    @Query("select c from Establecimiento c where c.canton like %:canton% and c.tipoEstablecimiento like %:tipoEst%")
+    List<Establecimiento> findByCantonyTipo(int canton, int tipoEst);
 
     List<Establecimiento> findByestNombreIgnoreCaseContains(@Param("estNombre") String estNombre);
 }

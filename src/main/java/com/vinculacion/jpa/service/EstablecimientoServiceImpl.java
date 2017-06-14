@@ -96,6 +96,27 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
         return found;
     }
 
+
+    @Transactional(readOnly = true)
+    public List<Establecimiento> getEstablecimientoByNombre(String estNombre) {
+        return establecimientoRepository.findByEstNombre(estNombre);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Establecimiento> getEstablecimientoByRepresentante(String estRepresentante) {
+        return establecimientoRepository.findByestRepresentante(estRepresentante);
+    }
+
+    @Override
+    public List<Establecimiento> getEstablecimientoByCantonyTipo(int cntId, int tipoEst) {
+        return establecimientoRepository.findByCantonyTipo(cntId, tipoEst);
+    }
+
+    @Override
+    public List<Establecimiento> getEstablecimientoByParams(String estRepresentante, Long canton) {
+        return establecimientoRepository.findByParams(estRepresentante, canton);
+    }
+
     @Transactional(rollbackFor = EstablecimientoNotFoundException.class)
     @Override
     public Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException {

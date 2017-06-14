@@ -2,6 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Buscar</title>
+    <!-- iCheck -->
+    <link th:href="@{/css/green.css}" rel="stylesheet"/>
+    <!-- Datatables -->
+    <link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/buttons.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/fixedHeader.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/responsive.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/scroller.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/custom.min.css}" rel="stylesheet"/>
+
 </head>
 <body onload="$('input[name=estNombre]').focus();">
 
@@ -12,8 +22,8 @@
                 <h1 text="Buscar establecimiento">Buscar establecimiento</h1>
                 <p class="lead">Buscar establecimiento</p>
             </div>
-        </div>
     </div>
+</div>
 </div>
 <div class="container bs-container">
     <div class="row">
@@ -22,7 +32,6 @@
                   class="form-horizontal" id="search-owner-form">
                 <table class="table table-striped">
                     <tr th:classappend="${#fields.hasErrors('estNombre')} ? 'has-error'">
-                        <h3>Buscar</h3>
                         <td class="col-sm-1">
                             <div class="control-group" th:classappend="${#fields.hasErrors('estNombre')} ? 'error'">
                                 <label class="control-label">Nombre del establecimiento</label>
@@ -54,11 +63,45 @@
                             </div>
                         </td>
                     </tr>
+                    <tr th:classappend="${#fields.hasErrors('canton')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('canton')} ? 'error'">
+                                <label class="control-label">Cantón</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <select th:field="*{canton}">
+                                    <option th:each="canton: ${cantones}" th:value="${canton.cntId}" th:text="${canton.cntNombre}"></option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('tipoEstablecimiento')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('tipoEstablecimiento')} ? 'error'">
+                                <label class="control-label">Tipo de establecimiento</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <select th:field="*{tipoEstablecimiento}">
+                                    <option th:each="tipoEst: ${tipoEstablecimiento}" th:value="${tipoEst.tipoEstId}" th:text="${tipoEst.tipoEstNombre}"></option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <td></td>
                         <td>
                             <div class="form-actions pull-right">
                                 <button type="submit" class="btn btn-success">Buscar</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-actions pull-right">
+                                <button type="button" th:onclick="'window.location.href=\'' + @{|/establecimientos/|} + '\''"
+                                        class="btn btn-success">Cancelar</button>
                             </div>
                         </td>
                     </tr>

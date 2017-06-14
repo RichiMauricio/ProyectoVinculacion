@@ -26,7 +26,10 @@ public interface EstablecimientoService {
     Establecimiento update(EstablecimientoDTO updated) throws EstablecimientoNotFoundException;
 
     Establecimiento findEstablecimientoById(Long ID) throws EstablecimientoNotFoundException;
-    //Contact getContactByEmail(String email);
+    List<Establecimiento> getEstablecimientoByNombre(String estNombre);
+    List<Establecimiento> getEstablecimientoByRepresentante(String estRepresentante);
+    List<Establecimiento> getEstablecimientoByCantonyTipo(int cntId, int tipoEst);
+    List<Establecimiento> getEstablecimientoByParams(String estRepresentante, Long canton);
     Establecimiento getEstablecimientoByIdWithDetail(Long ID);
     Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException;
 
