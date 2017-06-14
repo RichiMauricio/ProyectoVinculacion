@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:text="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Vive Tungurahua</title>
+</head>
+<body>
+<div class="container">
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>
+                    <span th:if="${establecimiento['new']}" th:remove="tag" text="Nuevo Establecimiento">
+                    [Nuevo Establecimiento]
+                    </span>
+                    <span th:unless="${establecimiento['new']}" th:remove="tag"
+                          th:text="|${establecimiento.estNombre}|">
+                     [Actualizar Establecimiento]
+                    </span>
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container bs-container big-font-container">
+    <div class="row row-centered">
+        <div class="bs-section col-lg-9 col-centered">
+            <form th:object="${establecimiento}" method="post" action="list.html"
+                  th:action="@{${#httpServletRequest.getRequestURL()}}"
+                  class="form-horizontal" id="establecimiento-form">
+
+                <div th:if="${#fields.hasGlobalErrors()}"
+                     class="has-error col-lg-offset-3 alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">X</button>
+                    <label class="control-label" th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</label>
+                </div>
+                <table class="table table-striped">
+                    <tr th:classappend="${#fields.hasErrors('estNombre')} ? 'has-error'">
+                        <td class="col-sm-1">
+                            <div class="control-group" th:classappend="${#fields.hasErrors('estNombre')} ? 'error'">
+                                <label class="control-label">Nombre</label>
+                            </div>
+                        </td>
+                        <td class="col-sm-2">
+                            <div class="controls">
+                                <input type="text" class="form-control" required="true" th:field="*{estNombre}"/>
+                                <label class="control-label" th:errors="*{estNombre}">[error]</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('estDireccion')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('estDireccion')} ? 'error'">
+                                <label class="control-label">Dirección</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <input type="text" class="form-control" required="true" th:field="*{estDireccion}"/>
+                                <label class="control-label" th:errors="*{estDireccion}">[error]</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('estRepresentante')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('estRepresentante')} ? 'error'">
+                                <label class="control-label">Representante</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <input type="text" class="form-control" required="true" th:field="*{estRepresentante}"/>
+                                <label class="control-label" th:errors="*{estRepresentante}">[error]</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('estPagina')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('estPagina')} ? 'error'">
+                                <label class="control-label">Página web</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <input type="text" class="form-control" th:field="*{estPagina}"/>
+                                <label class="control-label" th:errors="*{estPagina}">[error]</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('estAfiliado')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('estAfiliado')} ? 'error'">
+                                <label class="control-label">Afiliado</label>
+                            </div>
+                        </td>
+                        <td>
+                        <div class="controls">
+                            <input type="text" class="form-control" th:field="*{estAfiliado}"/>
+                            <label class="control-label" th:errors="*{estAfiliado}">[error]</label>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('canton')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('canton')} ? 'error'">
+                                <label class="control-label">Cantón</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <select th:field="*{canton}">
+                                    <option th:each="canton: ${cantones}" th:value="${canton.cntId}" th:text="${canton.cntNombre}"></option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:classappend="${#fields.hasErrors('tipoEstablecimiento')} ? 'has-error'">
+                        <td>
+                            <div class="control-group" th:classappend="${#fields.hasErrors('tipoEstablecimiento')} ? 'error'">
+                                <label class="control-label">Tipo de establecimiento</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="controls">
+                                <select th:field="*{tipoEstablecimiento}">
+                                    <option th:each="tipoEst: ${tipoEstablecimiento}" th:value="${tipoEst.tipoEstId}" th:text="${tipoEst.tipoEstNombre}"></option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table table-striped" th:if="${!establecimiento['new']}">
+                    <tr>
+                        <th class="col-sm-1"></th>
+                        <th class="col-sm-1">Tipo de número</th>
+                        <th class="col-sm-1">Número</th>
+                    </tr>
+                    <tr th:each="telefono, rowStat : *{telefonos}">
+                        <td></td>
+                        <td><input type="text" class="form-control" required="true"
+                                   th:field="*{telefonos[__${rowStat.index}__].tlfTipo}"/></td>
+                        <td><input type="text" class="form-control input-button-right" required="true"
+                                   th:field="*{telefonos[__${rowStat.index}__].tlfNumero}"/>
+                            <span class="col-sm-1 row-delete-button">
+                               <button type="submit" class="btn btn-default"
+                                       th:value="*{telefonos[__${rowStat.index}__].tlfId}"
+                                       name="removeEstablecimientoPhone">
+                                   <i class="glyphicon glyphicon-trash icon-white"></i>
+                               Borrar</button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="col-sm-1"></th>
+                        <th class="col-sm-1">Correo electrónico</th>
+                    </tr>
+                    <tr th:each="correo, rowStat : *{correos}">
+                        <td></td>
+                        <td><input type="text" class="form-control" pattern="^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$"
+                                   required="true" th:field="*{correos[__${rowStat.index}__].correoNombre}"/>
+                            <span class="col-sm-1 row-delete-button">
+                               <button type="submit" class="btn btn-default"
+                                       th:value="*{correos[__${rowStat.index}__].correoId}"
+                                       name="removeCorreoEstablecimiento">
+                                   <i class="glyphicon glyphicon-trash icon-white"></i>
+                               Borrar</button>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="col-lg-12 button-col-align-right">
+                    <input type="submit" class="btn btn-primary"
+                           th:value="(${establecimiento['new']} ? 'Añadir' : 'Actualizar') + ' Establecimiento'"/>
+                    <input th:type="submit" class="btn btn-success" th:if="${!establecimiento['new']}"
+                           name="addEstablecimientoPhone"
+                           value="Añadir teléfono"/>
+                    <input th:type="submit" class="btn btn-success" th:if="${!establecimiento['new']}"
+                           name="addCorreoEstablecimiento"
+                           value="Añadir correo"/>
+                    <input type="button" th:onclick="'window.location.href=\'' + @{|/establecimientos/|} + '\''"
+                           class="btn btn-success" value="Cancelar"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
