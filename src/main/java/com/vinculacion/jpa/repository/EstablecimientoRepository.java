@@ -26,6 +26,9 @@ public interface EstablecimientoRepository extends JpaRepository<Establecimiento
     @Query("select c from Establecimiento c where c.estNombre like %:estNombre% ")
     List<Establecimiento> findByEstNombre(@Param("estNombre") String estNombre);
 
+    @Query(value = "select * from Establecimiento c where c.estNombre like %:estNombre% and  c.canton =?1 and c.tipoEstablecimiento = ?2", nativeQuery = true)
+    List<Establecimiento> findByEstNombreCntTip(@Param("estNombre") String estNombre,Long canton,Long tipoEst);
+
     @Query("select c from Establecimiento c where c.estRepresentante like %:estRepresentante% ")
     List<Establecimiento> findByestRepresentante(@Param("estRepresentante") String estRepresentante);
 
@@ -33,8 +36,8 @@ public interface EstablecimientoRepository extends JpaRepository<Establecimiento
     List<Establecimiento> findByParams(@Param("estRepresentante") String estRepresentante, @Param("canton") Long canton);
 
     //Buscar establecimientos poe cantón y tipo de establecimiento
-    @Query("select c from Establecimiento c where c.canton like %:canton% and c.tipoEstablecimiento like %:tipoEst%")
-    List<Establecimiento> findByCantonyTipo(int canton, int tipoEst);
+    @Query("select c from Establecimiento c where c.canton = ?1 and c.tipoEstablecimiento = ?2")
+    List<Establecimiento> findByCantonyTipo(Long canton, Long tipoEst);
 
     List<Establecimiento> findByestNombreIgnoreCaseContains(@Param("estNombre") String estNombre);
 }

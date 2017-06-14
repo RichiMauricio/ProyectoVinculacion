@@ -54,18 +54,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     public List<Establecimiento> findAll() {
         return Lists.newArrayList(establecimientoRepository.findAll());
     }
-    /*
-    @Transactional(readOnly = true)
-    public List<Contact> findByFirstName(String firstName) {
-        return contactRepository.findByFirstName(firstName);
-    }
 
-    @Transactional(readOnly = true)
-    public List<Contact> findByFirstNameAndLastName(
-            String firstName, String lastName) {
-        return contactRepository.findByFirstNameAndLastName(firstName, lastName);
-    }
-*/
     @Transactional(readOnly = true)
     public List<Establecimiento> searchByNombre(String nombre) {
         return establecimientoRepository.findByestNombreIgnoreCaseContains(nombre);
@@ -103,12 +92,17 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Transactional(readOnly = true)
+    public List<Establecimiento> getEstablecimientoByNombreCntTip(String estNombre, Long canton, Long tipoEst) {
+        return establecimientoRepository.findByEstNombreCntTip(estNombre, canton, tipoEst);
+    }
+
+    @Transactional(readOnly = true)
     public List<Establecimiento> getEstablecimientoByRepresentante(String estRepresentante) {
         return establecimientoRepository.findByestRepresentante(estRepresentante);
     }
 
     @Override
-    public List<Establecimiento> getEstablecimientoByCantonyTipo(int cntId, int tipoEst) {
+    public List<Establecimiento> getEstablecimientoByCantonyTipo(Long cntId, Long tipoEst) {
         return establecimientoRepository.findByCantonyTipo(cntId, tipoEst);
     }
 

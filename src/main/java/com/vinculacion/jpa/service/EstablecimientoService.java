@@ -27,8 +27,9 @@ public interface EstablecimientoService {
 
     Establecimiento findEstablecimientoById(Long ID) throws EstablecimientoNotFoundException;
     List<Establecimiento> getEstablecimientoByNombre(String estNombre);
+    List<Establecimiento> getEstablecimientoByNombreCntTip(String estNombre, Long canton, Long tipoEst);
     List<Establecimiento> getEstablecimientoByRepresentante(String estRepresentante);
-    List<Establecimiento> getEstablecimientoByCantonyTipo(int cntId, int tipoEst);
+    List<Establecimiento> getEstablecimientoByCantonyTipo(Long cntId, Long tipoEst);
     List<Establecimiento> getEstablecimientoByParams(String estRepresentante, Long canton);
     Establecimiento getEstablecimientoByIdWithDetail(Long ID);
     Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException;

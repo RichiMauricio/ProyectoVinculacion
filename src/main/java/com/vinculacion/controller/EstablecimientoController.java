@@ -240,14 +240,14 @@ public class EstablecimientoController {
     @RequestMapping(value = "/establecimientos/list", method = RequestMethod.GET)
     public String processFindForm(Establecimiento establecimiento, BindingResult result, Model model, HttpSession session) {
         Collection<Establecimiento> results = null;
-        int cntId = Integer.parseInt(String.valueOf(establecimiento.getCanton()));
-        int tipoEstId = Integer.parseInt(String.valueOf(establecimiento.getTipoEstablecimiento()));
+        Long cntId = establecimiento.getCanton();
+        Long tipoEstId = establecimiento.getTipoEstablecimiento();
         try{
             //Verificar que no esté vacío el formulario
             if (StringUtils.isEmpty(establecimiento.getEstNombre())  && (StringUtils.isEmpty(establecimiento.getEstRepresentante()))) {
                 results = this.establecimientoService.getEstablecimientoByCantonyTipo(cntId,tipoEstId);
             } else if(StringUtils.isEmpty(establecimiento.getEstRepresentante())){
-                results = this.establecimientoService.getEstablecimientoByNombre(establecimiento.getEstNombre());
+                results = this.establecimientoService.getEstablecimientoByNombreCntTip(establecimiento.getEstNombre(), cntId,tipoEstId);
             }else{
                 results = this.establecimientoService.getEstablecimientoByRepresentante(establecimiento.getEstRepresentante());
             }
