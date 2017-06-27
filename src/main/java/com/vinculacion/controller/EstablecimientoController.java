@@ -9,7 +9,6 @@ import com.vinculacion.jpa.service.EstablecimientoService;
 import com.vinculacion.jpa.service.TipoEstablecimientoServiceImpl;
 import com.vinculacion.jpa.utils.EstablecimientoUtils;
 import com.vinculacion.jpa.utils.SharedUtils;
-import jdk.nashorn.internal.runtime.Debug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +124,7 @@ public class EstablecimientoController {
 
     //Mostrar un establecimiento
     @RequestMapping(value = "/establecimiento/{establecimientotId}", method = GET)
-    public String establecimientoDisplayPage(@PathVariable("establecimientotId") Long id, Model model) throws EstablecimientoNotFoundException {
+    public String establecimientoDisplayPage(@PathVariable("establecimientotId") int id, Model model) throws EstablecimientoNotFoundException {
         logger.debug("Mostrando página de establecimiento con id: {}", id);
 
         Establecimiento found = establecimientoService.findEstablecimientoById(id);
@@ -137,7 +136,7 @@ public class EstablecimientoController {
 
     //Actualizar un establecimiento
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", method = GET)
-    public String establecimientoEditPage(@PathVariable("establecimientoId") Long id, Model model) throws EstablecimientoNotFoundException {
+    public String establecimientoEditPage(@PathVariable("establecimientoId") int id, Model model) throws EstablecimientoNotFoundException {
         Establecimiento found = establecimientoService.getEstablecimientoByIdWithDetail(id);
         model.addAttribute(MODEL_ATTRIBUTE_ESTABLECIMIENTO, found);
         return ESTABLECIMIENTO_FORM_VIEW;
@@ -152,20 +151,11 @@ public class EstablecimientoController {
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 
-    //Actualizar correos
-    @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = { "addCorreoEstablecimiento" }, method = RequestMethod.POST)
-    public String addCorreoRow(final Establecimiento establecimiento) {
-        Correo correo = Correo.getBuilder(establecimiento,null).build();
-        correo.setCorreoId(SharedUtils.randomNegativeId());
-        establecimiento.getCorreos().add(correo);
-        return ESTABLECIMIENTO_FORM_VIEW;
-    }
-
     //Eliminar un teléfono
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = {
             "removeEstablecimientoPhone"}, method = RequestMethod.POST)
     public String removePhoneRow(final Establecimiento establecimiento, final HttpServletRequest req) throws EstablecimientoNotFoundException {
-        final Long establecimientoPhoneId = Long.valueOf(req.getParameter("removeEstablecimientoPhone"));
+        final int establecimientoPhoneId = Integer.valueOf(req.getParameter("removeEstablecimientoPhone"));
         for (Telefono establecimientoPhone : establecimiento.getTelefonos()) {
             if (establecimientoPhone.getTlfId().equals(establecimientoPhoneId)) {
                 establecimiento.getTelefonos().remove(establecimientoPhone);
@@ -178,11 +168,20 @@ public class EstablecimientoController {
         return ESTABLECIMIENTO_FORM_VIEW;
     }
 
+    //Actualizar correos
+    @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = { "addCorreoEstablecimiento" }, method = RequestMethod.POST)
+    public String addCorreoRow(final Establecimiento establecimiento) {
+        Correo correo = Correo.getBuilder(establecimiento,null).build();
+        correo.setCorreoId(SharedUtils.randomNegativeId());
+        establecimiento.getCorreos().add(correo);
+        return ESTABLECIMIENTO_FORM_VIEW;
+    }
+
     //Eliminar un correo
     @RequestMapping(value = "/establecimiento/update/{establecimientoId}", params = {
             "removeCorreoEstablecimiento"}, method = RequestMethod.POST)
     public String removeCorreoRow(final Establecimiento establecimiento, final HttpServletRequest req) throws EstablecimientoNotFoundException {
-        final Long correoEstablecimientoId = Long.valueOf(req.getParameter("removeCorreoEstablecimiento"));
+        final int correoEstablecimientoId = Integer.valueOf(req.getParameter("removeCorreoEstablecimiento"));
         for (Correo correo : establecimiento.getCorreos()) {
             if (correo.getCorreoId().equals(correoEstablecimientoId)) {
                 establecimiento.getCorreos().remove(correo);
@@ -224,7 +223,7 @@ public class EstablecimientoController {
 
     //Eliminar un establecimiento
     @RequestMapping(value = "/establecimiento/delete/{establecimientoId}", method = GET)
-    public String delete(@PathVariable("establecimientoId") Long estId) throws EstablecimientoNotFoundException {
+    public String delete(@PathVariable("establecimientoId") int estId) throws EstablecimientoNotFoundException {
         establecimientoService.deleteById(estId);
         return "redirect:/establecimientos/list";
     }
@@ -240,14 +239,14 @@ public class EstablecimientoController {
     @RequestMapping(value = "/establecimientos/list", method = RequestMethod.GET)
     public String processFindForm(Establecimiento establecimiento, BindingResult result, Model model, HttpSession session) {
         Collection<Establecimiento> results = null;
-        Long cntId = establecimiento.getCanton();
-        Long tipoEstId = establecimiento.getTipoEstablecimiento();
+        Canton cntId = establecimiento.getCanton();
+        TipoEstablecimiento tipoEstId = establecimiento.getTipoEstablecimiento();
         try{
             //Verificar que no esté vacío el formulario
             if (StringUtils.isEmpty(establecimiento.getEstNombre())  && (StringUtils.isEmpty(establecimiento.getEstRepresentante()))) {
-                results = this.establecimientoService.getEstablecimientoByCantonyTipo(cntId,tipoEstId);
+                results = this.establecimientoService.getEstablecimientoByCantonyTipo(cntId.getCntId(),tipoEstId.getTipoEstId());
             } else if(StringUtils.isEmpty(establecimiento.getEstRepresentante())){
-                results = this.establecimientoService.getEstablecimientoByNombreCntTip(establecimiento.getEstNombre(), cntId,tipoEstId);
+                results = this.establecimientoService.getEstablecimientoByNombreCntTip(establecimiento.getEstNombre(), cntId.getCntId(),tipoEstId.getTipoEstId());
             }else{
                 results = this.establecimientoService.getEstablecimientoByRepresentante(establecimiento.getEstRepresentante());
             }

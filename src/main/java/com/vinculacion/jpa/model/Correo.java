@@ -1,5 +1,6 @@
 package com.vinculacion.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vinculacion.jpa.dto.CorreoDTO;
 import com.vinculacion.jpa.model.validators.ExtendedEmailValidator;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -14,9 +15,10 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "Correo")
+@JsonIgnoreProperties({ "correoId", "establecimiento","new" })
 public class Correo {
 
-    private Long correoId;
+    private Integer correoId;
 
     private String correoNombre;
     private Establecimiento establecimiento;
@@ -37,11 +39,11 @@ public class Correo {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "correoId", nullable = false, insertable = true, updatable = true)
-    public Long getCorreoId() {
+    public Integer getCorreoId() {
         return correoId;
     }
 
-    public void setCorreoId(Long correoId) {
+    public void setCorreoId(Integer correoId) {
         this.correoId = correoId;
     }
 
@@ -58,7 +60,7 @@ public class Correo {
     }
 
     @ManyToOne
-    @JoinColumn(name = "estId", referencedColumnName = "estId", nullable = false)
+    @JoinColumn(name = "correoEstablecimiento")
     public Establecimiento getEstablecimiento() {
         return establecimiento;
     }

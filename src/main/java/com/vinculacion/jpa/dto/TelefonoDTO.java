@@ -10,8 +10,8 @@ import com.vinculacion.jpa.model.Telefono;
  */
 public class TelefonoDTO {
 
-    private Long telefonoId;
-    private Long establecimientoId;
+    private Integer telefonoId;
+    private Integer establecimientoId;
 
     @NotEmpty
     @Length(max = Telefono.MAX_LENGTH_PHONE_TYPE)
@@ -38,19 +38,19 @@ public class TelefonoDTO {
         this.phoneNumber = contactPhone.getTlfNumero();
     }
 
-    public Long getTelefonoId() {
+    public Integer getTelefonoId() {
         return telefonoId;
     }
 
-    public void setTelefonoId(Long contactPhoneId) {
+    public void setTelefonoId(Integer contactPhoneId) {
         this.telefonoId = contactPhoneId;
     }
 
-    public Long getEstablecimientoId() {
+    public Integer getEstablecimientoId() {
         return establecimientoId;
     }
 
-    public void setEstablecimientoId(Long establecimientoId) {
+    public void setEstablecimientoId(Integer establecimientoId) {
         this.establecimientoId = establecimientoId;
     }
 

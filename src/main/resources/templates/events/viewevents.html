@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Eventos</title>
+    <!--<link type="text/css" rel="stylesheet" href="/css/materialize.css"  media="screen,projection"/>-->
+    <!--<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>-->
+    <!--<link type="text/css" rel="stylesheet" href="/css/font-awesome.css"/>-->
+
+    <link   th:href="@{/css/materialize.css}" rel="stylesheet"/>
+    <link   th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
+    <!--<link th:href="@{http://fonts.googleapis.com/icon?family=Material+Icons}" rel="stylesheet"/>-->
+
+
+</head>
+<body>
+<div class="container">
+    <div th:if="${message}" role="alert">
+        <p th:text="${message}">success message</p>
+    </div>
+    <table class="highlight centered bordered">
+        <thead>
+        <tr>
+            <th>Nombre del Evento</th>
+            <th>Descripcion</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Lugar</th>
+            <th>Logitud</th>
+            <th>Latitud</th>
+            <th>Canton Perteneciente</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${eventos}">
+            <td th:text="${event.eventNombre}"></td>
+            <td th:text="${event.eventDescripcion}"></td>
+            <td th:text="${event.eventFechaInicio}"></td>
+            <td th:text="${event.eventFechaFin}"></td>
+            <td th:text="${event.eventLugar}"></td>
+            <td th:text="${event.eventLongitud}"></td>
+            <td th:text="${event.eventLatitud}"></td>
+            <td th:text="${event.cantonEv.cntNombre}"></td>
+            <td>
+                <a title="Ver" href="#" th:href="@{/}+${event.cantonEv.cntId}+@{/eventos/edit/}+${event.eventId}"><i class="fa fa-list-alt"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a title="Editar" href="#" th:href="@{/}+${event.cantonEv.cntId}+@{/eventos/edit/}+${event.eventId}"><i class="fa fa-pencil-square-o"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a title="Eliminar" href="#" th:href="@{/}+${event.cantonEv.cntId}+@{/eventos/delete/}+${event.eventId}"><i class="fa fa-eraser"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="#" th:href="@{/users/create}">Add New User</a>
+    <br/><br/>
+</div>
+</body>
+</html>

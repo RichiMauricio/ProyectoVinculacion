@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Establecimiento</title>
+    <link th:href="@{/css/green.css}" rel="stylesheet"/>
+    <!-- Datatables -->
+    <link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/buttons.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/fixedHeader.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/responsive.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/scroller.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/custom.min.css}" rel="stylesheet"/>
 </head>
 <body>
     <div class="container">
@@ -56,7 +64,7 @@
                                 <div th:text="${establecimiento.estPagina}"></div>
                             </td>
                         </tr>
-                        <tr th:with="canton= ${cantones[establecimiento.canton - 1]}">
+                        <tr th:with="canton= ${cantones[establecimiento.canton.cntId - 1]}">
                             <td class="td-label">
                                 <div text="Página web: ">Cantón</div>
                             </td>
@@ -64,7 +72,7 @@
                                 <div th:text="${canton.cntNombre}"></div>
                             </td>
                         </tr>
-                        <tr th:with="tipoEst= ${tipoEstablecimiento[establecimiento.tipoEstablecimiento - 1]}">
+                        <tr th:with="tipoEst= ${tipoEstablecimiento[establecimiento.tipoEstablecimiento.tipoEstId - 1]}">
                             <td class="td-label">
                                 <div text="Tipo de establecimiento: ">Tipo de establecimiento:</div>
                             </td>

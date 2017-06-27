@@ -9,9 +9,9 @@ import java.util.Random;
 public class SharedUtils {
 
 
-    public static Long randomNegativeId() {
+    public static int randomNegativeId() {
         Random rand = new Random();
-        return -1 * ((long) rand.nextInt(1000));
+        return -1 * (rand.nextInt(1000));
     }
 /*
     public static long timeMark() {

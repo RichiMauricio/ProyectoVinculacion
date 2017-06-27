@@ -27,17 +27,17 @@ public class CantonServiceImpl implements CantonService{
     }
 
     @Override
-    public Canton findOne(Long cntId) {
+    public Canton findOne(Integer cntId) {
         return cantonRepository.findOne(cntId);
     }
 
     @Override
-    public Canton getCantonById(Long ID) {
-        return cantonRepository.findByCantonId(ID);
+    public Canton getCantonById(Integer ID) {
+        return cantonRepository.findByCantonIdNombre(ID);
     }
 
     @Transactional(readOnly = true)
-    public Canton getEstablecimientoByIdWithDetail(Long ID) {
-        return cantonRepository.findByCantonId(ID);
+    public Canton getEstablecimientoByIdWithDetail(int ID) {
+        return cantonRepository.findByCantonIdNombre(ID);
     }
 }

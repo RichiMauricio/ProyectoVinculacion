@@ -25,4 +25,9 @@ public class TipoEstablecimientoServiceImpl implements TipoEstablecimientoServic
         return tipoEstablecimientoRepository.findAll();
     }
 
+    @Override
+    public TipoEstablecimiento findByTipoEstId(int tipoEstId) {
+        return tipoEstablecimientoRepository.findByTipoId(tipoEstId);
+    }
+
 }

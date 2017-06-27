@@ -12,8 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class CorreoDTO {
 
-    private Long correoId;
-    private Long establecimientoId;
+    private Integer correoId;
+    private Integer establecimientoId;
 
     @NotEmpty
     @ExtendedEmailValidator
@@ -35,19 +35,19 @@ public class CorreoDTO {
         this.correoNombre = correoNombre.getCorreoNombre();
     }
 
-    public Long getCorreoId() {
+    public Integer getCorreoId() {
         return correoId;
     }
 
-    public void setCorreoId(Long correoId) {
+    public void setCorreoId(Integer correoId) {
         this.correoId = correoId;
     }
 
-    public Long getEstablecimientoId() {
+    public Integer getEstablecimientoId() {
         return establecimientoId;
     }
 
-    public void setEstablecimientoId(Long establecimientoId) {
+    public void setEstablecimientoId(Integer establecimientoId) {
         this.establecimientoId = establecimientoId;
     }
 

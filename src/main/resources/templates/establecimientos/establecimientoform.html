@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Vive Tungurahua</title>
+    <link th:href="@{/css/green.css}" rel="stylesheet"/>
+    <!-- Datatables -->
+    <link th:href="@{/css/dataTables.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/buttons.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/fixedHeader.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/responsive.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/scroller.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/custom.min.css}" rel="stylesheet"/>
+    <style>
+        input {text-transform: uppercase;}
+    </style>
 </head>
 <body>
 <div class="container">
@@ -70,7 +81,7 @@
                         </td>
                         <td>
                             <div class="controls">
-                                <input type="text" class="form-control" required="true" th:field="*{estRepresentante}"/>
+                                <input type="text" class="form-control" th:field="*{estRepresentante}"/>
                                 <label class="control-label" th:errors="*{estRepresentante}">[error]</label>
                             </div>
                         </td>

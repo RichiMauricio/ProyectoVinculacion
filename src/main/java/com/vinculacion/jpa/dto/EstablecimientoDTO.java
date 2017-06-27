@@ -1,12 +1,14 @@
 package com.vinculacion.jpa.dto;
 
 import com.vinculacion.jpa.model.Canton;
+import com.vinculacion.jpa.model.TipoEstablecimiento;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.vinculacion.jpa.model.Establecimiento;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,11 +16,11 @@ import java.util.Set;
  */
 public class EstablecimientoDTO {
 
-    private Long establecimientoId;
-    private Long cntId;
-    private Long tipoEstId;
+    private Integer establecimientoId;
+    private Canton cntId;
+    private TipoEstablecimiento tipoEstId;
 
-    private Set<TelefonoDTO> contactPhones;
+    private List<TelefonoDTO> contactPhones;
     private Set<CorreoDTO> correosEst;
 
     @NotEmpty
@@ -42,6 +44,16 @@ public class EstablecimientoDTO {
 
     private String estLatitud;
 
+    private String estDescripcion;
+
+    public String getEstDescripcion() {
+        return estDescripcion;
+    }
+
+    public void setEstDescripcion(String estDescripcion) {
+        this.estDescripcion = estDescripcion;
+    }
+
     private int estAfiliado;
 
 
@@ -50,19 +62,19 @@ public class EstablecimientoDTO {
     public EstablecimientoDTO() {
     }
 
-    public Long getEstablecimientoId() {
+    public int getEstablecimientoId() {
         return establecimientoId;
     }
 
-    public void setEstablecimientoId(Long establecimientoId) {
+    public void setEstablecimientoId(Integer establecimientoId) {
         this.establecimientoId = establecimientoId;
     }
 
-    public Set<TelefonoDTO> getContactPhones() {
+    public List<TelefonoDTO> getContactPhones() {
         return contactPhones;
     }
 
-    public void setContactPhones(Set<TelefonoDTO> contactPhones) {
+    public void setContactPhones(List<TelefonoDTO> contactPhones) {
         this.contactPhones = contactPhones;
     }
 
@@ -138,19 +150,19 @@ public class EstablecimientoDTO {
         this.estAfiliado = estAfiliado;
     }
 
-    public Long getCntId() {
+    public Canton getCntId() {
         return cntId;
     }
 
-    public void setCntId(Long cntId) {
+    public void setCntId(Canton cntId) {
         this.cntId = cntId;
     }
 
-    public Long getTipoEstId() {
+    public TipoEstablecimiento getTipoEstId() {
         return tipoEstId;
     }
 
-    public void setTipoEstId(Long tipoEstId) {
+    public void setTipoEstId(TipoEstablecimiento tipoEstId) {
         this.tipoEstId = tipoEstId;
     }
 

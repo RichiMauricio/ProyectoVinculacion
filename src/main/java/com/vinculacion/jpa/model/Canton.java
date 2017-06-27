@@ -1,5 +1,7 @@
 package com.vinculacion.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,17 +17,20 @@ import static javax.persistence.GenerationType.IDENTITY;
  * Created by Mauricio on 19/04/2017.
  */
 @Entity
+//@Data
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "Canton")
 @Access(PROPERTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Canton implements Serializable{
 
-    private Long cntId;
+    private Integer cntId;
     private String cntNombre;
     private Double cntArea;
     private String cntDescripcion;
     private Integer cntPoblacion;
     private Set<Establecimiento> establecimientos;
+    //private List<Evento> eventos;
 
     public static final int DIMENSION_NOMBRE_CANTON = 40;
     public static final int DIMENSION_DESCRIPCION_CANTON = 3000;
@@ -38,11 +43,11 @@ public class Canton implements Serializable{
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "cntId")
-    public Long getCntId() {
+    public Integer getCntId() {
         return cntId;
     }
 
-    public void setCntId(Long cntId) {
+    public void setCntId(Integer cntId) {
         this.cntId = cntId;
     }
 
@@ -83,10 +88,6 @@ public class Canton implements Serializable{
         this.cntPoblacion = poblacion;
     }
 
-
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "fkEvtCnt")
-    private List<Canton> fkEvtCnt;*/
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "canton")
     public Set<Establecimiento> getEstablecimiento() {
         return establecimientos;
@@ -95,6 +96,8 @@ public class Canton implements Serializable{
     public void setEstablecimiento(Set<Establecimiento> establecimiento) {
         this.establecimientos = establecimiento;
     }
+
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "cantonEv")
 
     @Override
     public String toString() {

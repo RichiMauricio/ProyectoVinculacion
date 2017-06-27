@@ -5,10 +5,7 @@ import com.vinculacion.jpa.dto.CorreoDTO;
 import com.vinculacion.jpa.dto.EstablecimientoDTO;
 import com.vinculacion.jpa.dto.TelefonoDTO;
 import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
-import com.vinculacion.jpa.model.Canton;
-import com.vinculacion.jpa.model.Correo;
-import com.vinculacion.jpa.model.Establecimiento;
-import com.vinculacion.jpa.model.Telefono;
+import com.vinculacion.jpa.model.*;
 import com.vinculacion.jpa.model.validators.ExtendedEmailValidator;
 import com.vinculacion.jpa.repository.CorreoRepository;
 import com.vinculacion.jpa.repository.EstablecimientoRepository;
@@ -66,12 +63,12 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Transactional(readOnly = true)
-    public Establecimiento getEstablecimientoByIdWithDetail(Long ID) {
+    public Establecimiento getEstablecimientoByIdWithDetail(int ID) {
         return establecimientoRepository.findByContactIdWithDetail(ID);
     }
 
     @Transactional(readOnly = true)
-    public Establecimiento findEstablecimientoById(Long ID) throws EstablecimientoNotFoundException {
+    public Establecimiento findEstablecimientoById(int ID) throws EstablecimientoNotFoundException {
 
         logger.debug("Finding contact by id: {}", ID);
 
@@ -92,7 +89,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Transactional(readOnly = true)
-    public List<Establecimiento> getEstablecimientoByNombreCntTip(String estNombre, Long canton, Long tipoEst) {
+    public List<Establecimiento> getEstablecimientoByNombreCntTip(String estNombre, int canton, int tipoEst) {
         return establecimientoRepository.findByEstNombreCntTip(estNombre, canton, tipoEst);
     }
 
@@ -102,18 +99,24 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Override
-    public List<Establecimiento> getEstablecimientoByCantonyTipo(Long cntId, Long tipoEst) {
+    public List<Establecimiento> getEstablecimientoByCantonyTipo(int cntId, int tipoEst) {
         return establecimientoRepository.findByCantonyTipo(cntId, tipoEst);
     }
 
     @Override
-    public List<Establecimiento> getEstablecimientoByParams(String estRepresentante, Long canton) {
+    public List<Establecimiento> getEstablecimientoByParams(String estRepresentante, int canton) {
         return establecimientoRepository.findByParams(estRepresentante, canton);
     }
 
+    /*//Servicio para obtener todos los establecimientos según el canton
+    @Override
+    public List<Establecimiento> getEstablecimientosByCanton(Canton cantonId,TipoEstablecimiento tipoEstablecimiento) {
+        return establecimientoRepository.findByCantonAllEstab(cantonId,tipoEstablecimiento);
+    }*/
+
     @Transactional(rollbackFor = EstablecimientoNotFoundException.class)
     @Override
-    public Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException {
+    public Establecimiento deleteById(int id) throws EstablecimientoNotFoundException {
         Establecimiento deleted = findEstablecimientoById(id);
         establecimientoRepository.delete(deleted);
         return deleted;
@@ -126,7 +129,8 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
         // Update the Establecimiento information
         found.update(establecimientoDTO.getEstNombre(), establecimientoDTO.getEstRepresentante(),
                 establecimientoDTO.getEstDireccion(), establecimientoDTO.getEstPagina(), establecimientoDTO.getEstLongitud(),
-                establecimientoDTO.getEstLatitud(), establecimientoDTO.getEstFicheroImagenes(), establecimientoDTO.getEstAfiliado());
+                establecimientoDTO.getEstLatitud(), establecimientoDTO.getEstFicheroImagenes(),establecimientoDTO.getEstDescripcion(),
+                establecimientoDTO.getEstAfiliado());
         // Update the Establecimiento phone if updateChildren(true)
         if (establecimientoDTO.isUpdateChildren()) {
             if (establecimientoDTO.getContactPhones() != null) {
@@ -175,6 +179,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
                 establecimientoDTO.getEstLongitud(),
                 establecimientoDTO.getEstLatitud(),
                 establecimientoDTO.getEstFicheroImagenes(),
+                establecimientoDTO.getEstDescripcion(),
                 establecimientoDTO.getEstAfiliado())
                 .build();
 
@@ -201,7 +206,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     // region Contact Phones ---------------------- */
 
     @Override
-    public Telefono deleteEstablecimientoPhoneById(Long contactPhoneId) throws EstablecimientoNotFoundException {
+    public Telefono deleteEstablecimientoPhoneById(int contactPhoneId) throws EstablecimientoNotFoundException {
 
         Telefono contactPhone = telefonoRepository.findOne(contactPhoneId);
         if (contactPhone != null) {
@@ -213,7 +218,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Override
-    public Correo deleteCorreoEstablecimientoById(Long correoId) throws EstablecimientoNotFoundException {
+    public Correo deleteCorreoEstablecimientoById(int correoId) throws EstablecimientoNotFoundException {
         Correo correo = correoRepository.findOne(correoId);
         if (correo != null) {
             logger.info("Quitando el correo del establecimiento con información: {}", correo);
@@ -224,7 +229,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Transactional(readOnly = true)
-    public List<Telefono> findContactPhonesByestId(Long contactId) {
+    public List<Telefono> findContactPhonesByestId(int contactId) {
         return telefonoRepository.findByEstablecimiento_estId(contactId);
     }
 
@@ -241,7 +246,7 @@ public class EstablecimientoServiceImpl implements EstablecimientoService{
     }
 
     @Override
-    public Telefono findContactPhoneById(Long contactPhoneID) {
+    public Telefono findContactPhoneById(int contactPhoneID) {
         return telefonoRepository.findBytlfId(contactPhoneID);
     }
 

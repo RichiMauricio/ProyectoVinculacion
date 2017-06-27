@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by Mauricio on 05/06/2017.
  */
-public interface CorreoRepository extends JpaRepository<Correo,Long>, Serializable {
+public interface CorreoRepository extends JpaRepository<Correo,Integer>, Serializable {
 
-    Correo findBycorreoId(Long id);
-    List<Correo> findByEstablecimiento_estId(Long id);
+    Correo findBycorreoId(int id);
+    List<Correo> findByEstablecimiento_estId(int id);
 }

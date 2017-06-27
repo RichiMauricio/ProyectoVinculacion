@@ -1,10 +1,12 @@
 package com.vinculacion.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.AccessType.PROPERTY;
@@ -17,9 +19,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "Establecimiento")
 @Access(PROPERTY)
+@JsonIgnoreProperties({"estId","estAfiliado", "canton", "tipoEstablecimiento", "new" ,})
 public class Establecimiento implements Serializable{
 
-    private Long estId;
+    private Integer estId;
     private String estNombre;
     private String estRepresentante;
     private String estDireccion;
@@ -27,11 +30,13 @@ public class Establecimiento implements Serializable{
     private String estLatitud;
     private String estLongitud;
     private String estFicheroImagenes;
+    private String estDescripcion;
+
     private int estAfiliado;
-    private Set<Telefono> telefonos;
+    private List<Telefono> telefonos;
     private Set<Correo> correos;
-    private Long canton;
-    private Long tipoEstablecimiento;
+    public Canton canton;
+    public TipoEstablecimiento tipoEstablecimiento;
 
     public static final int MAX_LENGTH_ESTABLECIMIENTO_NOMBRE = 40;
     public static final int MAX_LENGTH_ESTABLECIMIENTO_REPRESENTANTE = 50;
@@ -48,11 +53,11 @@ public class Establecimiento implements Serializable{
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "estId")
-    public Long getEstId() {
+    public Integer getEstId() {
         return estId;
     }
 
-    public void setEstId(Long estId) {
+    public void setEstId(Integer estId) {
         this.estId = estId;
     }
 
@@ -128,30 +133,41 @@ public class Establecimiento implements Serializable{
         this.estFicheroImagenes = estFicheroImagenes;
     }
 
-    @Column(name = "canton", unique = false, nullable = false)
-    public Long getCanton() {
+    @Column(name = "estDescripcion", unique = false, nullable = true)
+    public String getEstDescripcion() {
+        return estDescripcion;
+    }
+
+    public void setEstDescripcion(String estDescripcion) {
+        this.estDescripcion = estDescripcion;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "canton", unique = false, nullable = false)
+    public Canton getCanton() {
         return canton;
     }
 
-    public void setCanton(Long canton) {
+    public void setCanton(Canton canton) {
         this.canton = canton;
     }
 
-    @Column(name = "tipoEstablecimiento", unique = false, nullable = false)
-    public Long getTipoEstablecimiento() {
+    @ManyToOne
+    @JoinColumn(name = "tipoEstablecimiento", unique = false, nullable = false)
+    public TipoEstablecimiento getTipoEstablecimiento() {
         return tipoEstablecimiento;
     }
 
-    public void setTipoEstablecimiento(Long tipoEstablecimiento) {
+    public void setTipoEstablecimiento(TipoEstablecimiento tipoEstablecimiento) {
         this.tipoEstablecimiento = tipoEstablecimiento;
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "establecimiento")
-    public Set<Telefono> getTelefonos() {
+    public List<Telefono> getTelefonos() {
         return telefonos;
     }
 
-    public void setTelefonos(Set<Telefono> telefonos) {
+    public void setTelefonos(List<Telefono> telefonos) {
         this.telefonos = telefonos;
     }
 
@@ -176,14 +192,15 @@ public class Establecimiento implements Serializable{
                 .append("longitud", this.getEstLongitud())
                 .append("latitud", this.getEstLatitud())
                 .append("ficheroDeImagenes", this.getEstFicheroImagenes())
+                .append("descripcion", this.getEstDescripcion())
                 .append("afiliado", this.getEstAfiliado())
-                .append("cntId", this.getCanton())
-                .append("tipoEstId", this.getTipoEstablecimiento())
+                .append("cntId", this.getCanton().getCntId())
+                .append("tipoEstId", this.getTipoEstablecimiento().getTipoEstId())
                 .toString();
     }
 
     public void update( final String nombre, final String representante, final String direccion, final String pagina,
-                        final String longitud, final String latitud, final String ficheroDeImagenes, final int afiliado) {
+                        final String longitud, final String latitud, final String ficheroDeImagenes, final String descripcion, final int afiliado) {
         this.estNombre = nombre;
         this.estRepresentante = representante;
         this.estDireccion = direccion;
@@ -191,21 +208,22 @@ public class Establecimiento implements Serializable{
         this.estLongitud = longitud;
         this.estLatitud = latitud;
         this.estFicheroImagenes = ficheroDeImagenes;
+        this.estDescripcion = descripcion;
         this.estAfiliado = afiliado;
     }
 
-    public static Builder getBuilder(Long tipoEst, Long cntId, String nombre, String representante, String direccion, String pagina,
-                                     String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
-        return new Establecimiento.Builder(tipoEst, cntId, nombre, representante, direccion, pagina, longitud, latitud, ficheroDeImagenes,
-                afiliado);
+    public static Builder getBuilder(TipoEstablecimiento tipoEst, Canton cntId, String nombre, String representante, String direccion, String pagina,
+                                     String longitud, String latitud, String ficheroDeImagenes, String descripcion, int afiliado) {
+        return new Establecimiento.Builder(tipoEst, cntId, nombre, representante, direccion, pagina, longitud, latitud,
+                ficheroDeImagenes, descripcion,afiliado);
     }
 
     public static class Builder {
 
         private Establecimiento built;
 
-        public Builder(Long tipoEst, Long cntId, String nombre, String representante, String direccion, String pagina,
-                       String longitud, String latitud, String ficheroDeImagenes, int afiliado) {
+        public Builder(TipoEstablecimiento tipoEst, Canton cntId, String nombre, String representante, String direccion, String pagina,
+                       String longitud, String latitud, String ficheroDeImagenes,String descripcion, int afiliado) {
             built = new Establecimiento();
             built.estNombre = nombre;
             built.estRepresentante = representante;
@@ -214,6 +232,7 @@ public class Establecimiento implements Serializable{
             built.estLongitud = longitud;
             built.estLatitud = latitud;
             built.estFicheroImagenes = ficheroDeImagenes;
+            built.estDescripcion = descripcion;
             built.estAfiliado = afiliado;
             built.canton = cntId;
             built.tipoEstablecimiento = tipoEst;

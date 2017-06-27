@@ -1,7 +1,6 @@
 package com.vinculacion.jpa.dto;
 
 import com.vinculacion.jpa.model.Canton;
-import com.vinculacion.jpa.model.Establecimiento;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,7 +12,7 @@ import java.util.Set;
  */
 public class CantonDTO {
 
-    private Long cantonId;
+    private Integer cantonId;
     private Set<EstablecimientoDTO> establecimientos;
 
     @NotEmpty
@@ -30,11 +29,11 @@ public class CantonDTO {
     public CantonDTO() {
     }
 
-    public Long getCantonId() {
+    public Integer getCantonId() {
         return cantonId;
     }
 
-    public void setCantonId(Long cantonId) {
+    public void setCantonId(Integer cantonId) {
         this.cantonId = cantonId;
     }
 

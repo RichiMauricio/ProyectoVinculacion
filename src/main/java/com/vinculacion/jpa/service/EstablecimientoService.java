@@ -1,13 +1,10 @@
 package com.vinculacion.jpa.service;
 
-import com.vinculacion.jpa.model.Canton;
-import com.vinculacion.jpa.model.Correo;
-import com.vinculacion.jpa.model.Establecimiento;
+import com.vinculacion.jpa.model.*;
 
 import java.util.List;
 import com.vinculacion.jpa.dto.*;
 import com.vinculacion.jpa.exceptions.EstablecimientoNotFoundException;
-import com.vinculacion.jpa.model.Telefono;
 
 /**
  * Created by Mauricio on 05/06/2017.
@@ -25,24 +22,25 @@ public interface EstablecimientoService {
     Establecimiento add(EstablecimientoDTO added);
     Establecimiento update(EstablecimientoDTO updated) throws EstablecimientoNotFoundException;
 
-    Establecimiento findEstablecimientoById(Long ID) throws EstablecimientoNotFoundException;
+    Establecimiento findEstablecimientoById(int ID) throws EstablecimientoNotFoundException;
     List<Establecimiento> getEstablecimientoByNombre(String estNombre);
-    List<Establecimiento> getEstablecimientoByNombreCntTip(String estNombre, Long canton, Long tipoEst);
+    List<Establecimiento> getEstablecimientoByNombreCntTip(String estNombre, int canton, int tipoEst);
     List<Establecimiento> getEstablecimientoByRepresentante(String estRepresentante);
-    List<Establecimiento> getEstablecimientoByCantonyTipo(Long cntId, Long tipoEst);
-    List<Establecimiento> getEstablecimientoByParams(String estRepresentante, Long canton);
-    Establecimiento getEstablecimientoByIdWithDetail(Long ID);
-    Establecimiento deleteById(Long id) throws EstablecimientoNotFoundException;
+    List<Establecimiento> getEstablecimientoByCantonyTipo(int cntId, int tipoEst);
+    List<Establecimiento> getEstablecimientoByParams(String estRepresentante, int canton);
+    //List<Establecimiento> getEstablecimientosByCanton(Canton cntId, TipoEstablecimiento tipoEstabId);
+    Establecimiento getEstablecimientoByIdWithDetail(int ID);
+    Establecimiento deleteById(int id) throws EstablecimientoNotFoundException;
 
     // endregion
 
     // region Contact Phones -------------------------------------- */
 
-    List<Telefono> findContactPhonesByestId(Long contactId);
+    List<Telefono> findContactPhonesByestId(int contactId);
     Telefono addContactPhone(TelefonoDTO contactPhoneDTO);
-    Telefono findContactPhoneById(Long contactPhoneID);
-    Telefono deleteEstablecimientoPhoneById(Long contactPhoneId) throws EstablecimientoNotFoundException;
-    Correo deleteCorreoEstablecimientoById(Long correoId) throws EstablecimientoNotFoundException;
+    Telefono findContactPhoneById(int contactPhoneID);
+    Telefono deleteEstablecimientoPhoneById(int contactPhoneId) throws EstablecimientoNotFoundException;
+    Correo deleteCorreoEstablecimientoById(int correoId) throws EstablecimientoNotFoundException;
 
     // endregion
 }

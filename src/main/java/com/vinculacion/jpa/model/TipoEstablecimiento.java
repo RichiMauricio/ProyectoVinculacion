@@ -21,7 +21,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Access(PROPERTY)
 public class TipoEstablecimiento implements Serializable{
 
-    private Long tipoEstId;
+    private Integer tipoEstId;
     private String tipoEstNombre;
     private Set<Establecimiento> establecimientos;
 
@@ -35,11 +35,11 @@ public class TipoEstablecimiento implements Serializable{
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "tipoEstId")
-    public Long getTipoEstId() {
+    public Integer getTipoEstId() {
         return tipoEstId;
     }
 
-    public void setTipoEstId(Long tipoEstId) {
+    public void setTipoEstId(Integer tipoEstId) {
         this.tipoEstId = tipoEstId;
     }
 

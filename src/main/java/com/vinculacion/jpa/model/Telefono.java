@@ -1,5 +1,6 @@
 package com.vinculacion.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vinculacion.jpa.dto.TelefonoDTO;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.core.style.ToStringCreator;
@@ -13,9 +14,10 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "Telefono")
+@JsonIgnoreProperties({ "tlfId", "establecimiento","new" })
 public class Telefono {
 
-    private Long tlfId;
+    private Integer tlfId;
 
     private String tlfTipo;
     private String tlfNumero;
@@ -39,11 +41,11 @@ public class Telefono {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "tlfId", nullable = false, insertable = true, updatable = true)
-    public Long getTlfId() {
+    public Integer getTlfId() {
         return tlfId;
     }
 
-    public void setTlfId(Long tlfId) {
+    public void setTlfId(Integer tlfId) {
         this.tlfId = tlfId;
     }
 
@@ -70,7 +72,7 @@ public class Telefono {
     }
 
     @ManyToOne
-    @JoinColumn(name = "estId", referencedColumnName = "estId", nullable = false)
+    @JoinColumn(name = "tlfEstablecimiento")
     public Establecimiento getEstablecimiento() {
         return establecimiento;
     }
@@ -89,8 +91,6 @@ public class Telefono {
                 .append("numero", this.getTlfNumero())
                 .toString();
     }
-
-
 
     public void update(final String phoneType, final String phoneNumber) {
         this.tlfTipo = phoneType;
@@ -116,6 +116,4 @@ public class Telefono {
             return built;
         }
     }
-
-
 }
